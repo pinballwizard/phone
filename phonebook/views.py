@@ -11,7 +11,7 @@ class SearchForm(forms.Form):
 
 
 def config_reload(request):
-    file = "/home/pinballwizard/users.conf"
+    file = "/etc/asterisk/users.conf"
     config = configparser.ConfigParser()
     config.read(file)
     for user in config.sections():
