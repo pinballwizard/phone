@@ -17,6 +17,7 @@ def config_reload(request):
     config.read(file)
     for user in config.sections():
         try:
+            print(User.objects.filter(number=user).exists())
             if User.objects.filter(number=user).exists():
                 us = User.objects.get(number=user)
                 us.number=config.get(user,'cid_number')
