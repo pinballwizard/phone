@@ -11,16 +11,24 @@ class SearchForm(forms.Form):
 
 
 def config_reload(request):
-    file = "/etc/asterisk/users.conf"
+    # file = "/etc/asterisk/users.conf"
+    file = "/home/pinballwizard/users.conf"
     config = configparser.ConfigParser()
     config.read(file)
     for user in config.sections():
         try:
-            u = User(last_name=config.get(user,'fullname'), number=config.get(user,'cid_number'))
-            try:
+            if User.objects.filter(number=user).exists():
+                us = User.objects.get(number=user)
+                us.number=config.get(user,'cid_number')
+                us.last_name=config.get(user,'fullname')
+                us.mac_adress=config.get(user,'macaddress')
+                us.save()
+            else:
+                u = User()
+                u.last_name=config.get(user,'fullname')
+                u.number=config.get(user,'cid_number')
+                u.mac_adress=config.get(user,'macaddress')
                 u.save()
-            except:
-                print("User %s already exist" % user)
         except:
             print("User %s haven't filed fullname or cid_number" % user)
     return redirect(phonebook_page)
@@ -29,7 +37,7 @@ def config_reload(request):
 def phonebook_page(request):
     data = {
         'search_form': SearchForm(),
-        'users': User.objects.all()
+        'users': User.objects.order_by('number')
     }
     if request.method == 'GET':
         form = SearchForm(request.GET)

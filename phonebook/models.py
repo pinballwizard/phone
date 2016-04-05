@@ -7,6 +7,7 @@ class User(models.Model):
     name = models.CharField("Имя", max_length=20, blank=True)
     number = models.CharField("Телефон", max_length=5, unique=True)
     mobile = models.CharField("Мобильный", max_length=10, blank=True)
+    mac_adress = models.CharField("mac-адрес", max_length=12, blank=True)
 
     class Meta:
         verbose_name = "Пользователь"
