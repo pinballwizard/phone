@@ -81,8 +81,14 @@ WSGI_APPLICATION = 'phone.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'phone',
+        'USER': 'django',
+        'PASSWORD': 'G2x?bhlo',
+        'HOST': 'orchis.ksk.loc',
+        'PORT': '3306',
+        'default-character-set': 'utf8',
+        'collate': 'utf8_general_ci',
     }
 }
 
