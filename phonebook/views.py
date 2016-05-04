@@ -46,9 +46,13 @@ def config_parse(request):
     config.read_string(f)
     for user in config.sections():
         if config.has_option(user, 'fullname') and config.has_option(user, 'cid_number') and config.has_option(user, 'macaddress'):
-            User.objects.get_or_create(last_name=config.get(user,'fullname'),
-                                       number=config.get(user,'cid_number'),
-                                       mac_adress=config.get(user, 'macaddress'))
+            User.objects.update_or_create(
+                number=config.get(user, 'cid_number'),
+                defaults={
+                    'last_name': config.get(user,'fullname'),
+                    'mac_adress': config.get(user, 'macaddress')
+                }
+            )
         else:
             print("nothing to save for {0}".format(user))
     return redirect(phonebook_page)
