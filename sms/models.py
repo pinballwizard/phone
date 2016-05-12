@@ -8,7 +8,7 @@ class SMS(models.Model):
     sender = models.CharField('Номер отправителя', max_length=20)
     target = models.CharField('Номер получателя', max_length=20)
     rescount = models.SmallIntegerField('Количество')
-    text = models.CharField('Текст сообщения')
+    text = models.CharField('Текст сообщения', max_length=500)
 
     class Meta:
         verbose_name = "SMS сообщение"

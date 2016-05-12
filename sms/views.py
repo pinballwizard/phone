@@ -25,4 +25,5 @@ def sms_notice(request):
             text = request.POST['TEXT']
         )
         sms.save()
-        str = "Получено смс от абонента {0} с текстом {1}".format(request.POST['SENDER'], request.POST['TEXT'])
+        # str = "Получено смс от абонента {0} с текстом {1}".format(request.POST['SENDER'], request.POST['TEXT'])
+    return HttpResponse(True)

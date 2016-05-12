@@ -11,4 +11,3 @@ class SMSAdmin(admin.ModelAdmin):
     list_display = ('ordid', 'cnrid', 'sibnum', 'sender', 'target', 'rescount', 'text')
     search_fields = ['sender','target']
     list_filter = ('cnrid',)
-    ordering = ['number']
