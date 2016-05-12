@@ -1,6 +1,9 @@
 from django.contrib import admin
 from phonebook.models import *
+from django.contrib.admin.sites import AdminSite
 
+AdminSite.site_header = 'Управление телефонной книгой'
+AdminSite.site_title = 'Телефонная книга'
 
 @admin.register(ExtendedNumber)
 class ExtendedNumberAdmin(admin.ModelAdmin):
@@ -21,6 +24,4 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ['fullname','number','mobile']
     list_filter = ('panel',)
     ordering = ['number']
-    inlines = [
-         ExtendedNumberInLine,
-    ]
+    inlines = [ExtendedNumberInLine]

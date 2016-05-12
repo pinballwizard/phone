@@ -1,16 +1,32 @@
 from django.shortcuts import render, redirect
 from django import forms
+from django.db.models import Q
 from django.http import HttpResponse
 import configparser
+from django.db import connections
 from phonebook.models import User, ExtendedNumber
+from operator import itemgetter, attrgetter
 import paramiko
 
 
-def get_file(remote_file):
-    host = "172.16.1.45"
-    port = 22
-    transport = paramiko.Transport((host,port))
+def client_exec(command):
+    client = paramiko.SSHClient()
+    client.load_system_host_keys()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect('172.16.1.45', 22, 'itadmin', 'G2x?bhlo')
+    (stdin, stdout, stderr) = client.exec_command(command)
+    output = stdout.read()
+    client.close()
+    return output
+
+def get_transport():
+    transport = paramiko.Transport(("172.16.1.45",22))
     transport.connect(username='itadmin', password='G2x?bhlo')
+    return transport
+
+
+def read_file(remote_file):
+    transport = get_transport()
     sftp = paramiko.SFTPClient.from_transport(transport)
     with sftp.file(remote_file, mode='r') as f:
         infile = f.read()
@@ -19,20 +35,18 @@ def get_file(remote_file):
     return infile.decode('utf-8')
 
 
-def put_file(local_file, remote_file):
-    host = "172.16.1.45"
-    port = 22
-    transport = paramiko.Transport((host,port))
-    transport.connect(username='itadmin', password='G2x?bhlo')
+def write_in_file(remote_file, text):
+    transport = get_transport()
     sftp = paramiko.SFTPClient.from_transport(transport)
-    sftp.put(local_file, remote_file)
+    with sftp.file(remote_file, mode='r') as f:
+        f.write(text)
     sftp.close()
     transport.close()
 
 
-def notify(user):
-    com = 'sudo asterisk -rx "sip notify yealink-check {0}"'.format(user.number)
-    print(com)
+sip_reload = 'sudo asterisk -rx "sip reload"'
+reload_phoneprov = 'sudo asterisk -rx "module reload res_phoneprov"'
+notify = lambda user: 'sudo asterisk -rx "sip notify yealink-check {0}"'.format(user.number)
 
 
 class SearchForm(forms.Form):
@@ -40,8 +54,8 @@ class SearchForm(forms.Form):
     search.widget = forms.TextInput(attrs={'class': 'form-control', 'type': 'search', 'placeholder':'Введите запрос'})
 
 
-def config_parse(request):
-    f = get_file('/etc/asterisk/users.conf')
+def config_parse():
+    f = read_file('/etc/asterisk/users.conf')
     config = configparser.ConfigParser()
     config.read_string(f)
     for user in config.sections():
@@ -55,7 +69,6 @@ def config_parse(request):
             )
         else:
             print("nothing to save for {0}".format(user))
-    return redirect(phonebook_page)
 
 
 # def user_add(request, user):
@@ -67,14 +80,24 @@ def config_parse(request):
 #     config.set(user.macadress, user.macadress)
 #     # config.write()
 
-# def ext_panel_user_exist(request):
+
+def user_panel_parse():
+    command = 'ls /usr/share/asterisk/phoneprov/'
+    configs = client_exec(command).decode('utf-8').split()
+    configs.remove('000000000000.cfg')
+    [configs.remove(config) for config in configs if config.startswith('y')]
+    [configs.remove(config) for config in configs if config.startswith('y')]
+    [configs.remove(config) for config in configs if config.startswith('y')]
+    m = [x.replace('.cfg','') for x in configs]
+    User.objects.filter(mac_adress__in=m).update(panel=True)
+    User.objects.exclude(mac_adress__in=m).update(panel=False)
 
 
-
-def ext_panel_parse(request):
+def ext_panel_parse():
     for user in User.objects.filter(panel=True, mac_adress__isnull=False):
         remotef = '/usr/share/asterisk/phoneprov/{0}.cfg'.format(user.mac_adress)
-        file = get_file(remotef)
+        print(user.mac_adress)
+        file = read_file(remotef)
         EN = {}
         for line in file.splitlines():
             if line.startswith('expansion_module'):
@@ -93,15 +116,25 @@ def ext_panel_parse(request):
                     EN[module][key]['name'] = sl[1]
         for module in EN:
             for key in EN[module]:
-                E = ExtendedNumber()
-                E.module = module
-                E.key = key
-                E.name = EN[module][key]['name']
-                E.number = EN[module][key]['number']
+                name = EN[module][key]['name']
+                number = EN[module][key]['number']
                 try:
-                    user.extendednumber_set.get_or_create(E)
+                    user.extendednumber_set.update_or_create(
+                        key=key,
+                        defaults={
+                            'module': module,
+                            'name': name,
+                            'number': number
+                        }
+                    )
                 except:
-                    print("Extended number {0} {1} already exist".format(E.name, E.number))
+                    print("Extended number {0} {1} already exist".format(name, number))
+
+
+def refresh(request):
+    config_parse()
+    user_panel_parse()
+    ext_panel_parse()
     return redirect(phonebook_page)
 
 
@@ -121,3 +154,18 @@ def phonebook_page(request):
             data['users'] = queryset
             data['search_form'] = form
     return render(request, 'phonebook/phonebook.html', data)
+
+
+def call_stats(request):
+    cursor = connections['asterisk'].cursor()
+    users = User.objects.all()
+    for user in users:
+        cursor.execute("SELECT duration FROM cdr WHERE src={0}".format(user.number))
+        s = 0
+        for n in cursor.fetchall():
+            s += n[0]
+        user.call_duration = int(s/60)
+    data = {
+        'users': users
+    }
+    return render(request, 'phonebook/callstats.html', data)

@@ -18,10 +18,10 @@ class User(models.Model):
 
 class ExtendedNumber(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'panel': True}, verbose_name='Просматривает')
-    key = models.IntegerField('Кнопка')
+    key = models.PositiveSmallIntegerField('Кнопка')
     name = models.CharField('Имя', max_length=20)
     number = models.CharField('Номер', max_length=11)
-    module = models.IntegerField('Модуль', default=1)
+    module = models.PositiveSmallIntegerField('Модуль', default=1)
 
     class Meta:
         verbose_name = "Номер на панели"

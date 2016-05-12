@@ -54,7 +54,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'phone.urls'
 
 ADMINS = (
-    ('Vasiliy', 'linux@kraseco24.ru'),
+    ('LinuxAdmin', 'linux@kraseco24.ru'),
 )
 
 TEMPLATES = [
@@ -75,6 +75,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'phone.wsgi.application'
 
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -84,6 +90,16 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'phone',
         'USER': 'django',
+        'PASSWORD': 'G2x?bhlo',
+        'HOST': 'orchis.ksk.loc',
+        'PORT': '3306',
+        'default-character-set': 'utf8',
+        'collate': 'utf8_general_ci',
+    },
+    'asterisk': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'asterisk',
+        'USER': 'asterisk',
         'PASSWORD': 'G2x?bhlo',
         'HOST': 'orchis.ksk.loc',
         'PORT': '3306',
@@ -114,3 +130,13 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media/'
+
+#Email settings
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'mail.kraseco24.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'sccm@kraseco24.ru'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
