@@ -8,6 +8,6 @@ AdminSite.site_title = 'SMS рассылка'
 
 @admin.register(SMS)
 class SMSAdmin(admin.ModelAdmin):
-    list_display = ('ordid', 'cnrid', 'sibnum', 'sender', 'target', 'rescount', 'text')
+    list_display = ('smsid', 'agtid', 'inbox', 'sender', 'target', 'rescount', 'text')
     search_fields = ['sender','target']
-    list_filter = ('cnrid',)
+    list_filter = ('agtid',)

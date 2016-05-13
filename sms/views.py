@@ -7,7 +7,7 @@ import requests
 import pymssql
 
 
-def mssql_connect():
+def mssql_connect(id):
     conn = pymssql.connect(
         server = "ksql02.ksk.loc:1434",
         user = 'rd',
@@ -15,7 +15,9 @@ def mssql_connect():
         database = 'DataForSMS',
     )
     cursor = conn.cursor()
-    cursor.execute('SELECT AnswerText FROM DataTable WHERE AbonentId=184015641911')
+    query = 'SELECT AnswerText FROM DataTable WHERE AbonentId={0}'.format(id)
+    print(query)
+    cursor.execute(query)
     return cursor.fetchone()
 
 
@@ -29,33 +31,45 @@ class smsSendForm(forms.Form):
 @csrf_exempt
 def get_sms(request):
     """
-    ORDID = > ID сообщения
-    CNRID = > номер конрагента
-    SIBNUM = > ID входящего ящика
-    SENDER = > номер отправителя
-    TARGET = > номер получателя
-    RESCOUNT = > количество для тарификации
-    TEXT = > текст сообщения
+    Как должно быть
+    ORDID => ID сообщения
+    CNRID => номер конрагента
+    SIBNUM => ID входящего ящика
+    SENDER => номер отправителя
+    TARGET => номер получателя
+    RESCOUNT => количество для тарификации
+    TEXT => текст сообщения
+
+    Как есть
+    TEXT => текст сообщения
+    INBOX => ID входящего ящика
+    TARGET => номер получателя
+    RESCOUNT => количество для тарификации
+    SENDER => номер отправителя
+    AGTID => номер конрагента
+    SMSID => SMS ID
+    LOGIN => Логин личного кабинет
     """
     if request.method == 'POST':
         print(request.POST)
         sms = SMS(
-            ordid = request.POST['ORDID'],
-            cnrid = request.POST['CNRID'],
-            sibnum = request.POST['SIBNUM'],
+            smsid = request.POST['SMSID'],
+            agtid = request.POST['AGTID'],
+            inbox = request.POST['INBOX'],
             sender = request.POST['SENDER'],
             target = request.POST['TARGET'],
             rescount = request.POST['RESCOUNT'],
             text = request.POST['TEXT']
         )
         sms.save()
-        # str = "Получено смс от абонента {0} с текстом {1}".format(request.POST['SENDER'], request.POST['TEXT'])
+        text = mssql_connect(request.POST['TEXT'])
+        if text:
+            text = text[0]
+        else:
+            text = "Неверный номер договора. Обратитесь по номеру +73912286207"
+        print(text)
+        post_sms(text, request.POST['SENDER'])
     return HttpResponse(status=200)
-
-
-def test_con(request):
-    s = mssql_connect()
-    return HttpResponse(s)
 
 
 def post_sms(message, target):
@@ -67,7 +81,9 @@ def post_sms(message, target):
         'target': target,
     }
     url = 'http://beeline.amega-inform.ru/sendsms/'
+    print(con)
     r = requests.post(url, data=con)
+    print(r)
     return True
 
 
@@ -76,8 +92,7 @@ def test_sms(request):
         'send_sms': smsSendForm,
     }
     if request.method == 'POST':
-        # message = request.POST['text']
-        message = mssql_connect()
+        message = request.POST['text']
         target = request.POST['target']
         if post_sms(message, target):
             return HttpResponse("Тестовая отправка на номер {0} прошла успешно".format(target))

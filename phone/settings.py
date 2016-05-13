@@ -77,12 +77,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'phone.wsgi.application'
 
-AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
+# AUTHENTICATION_BACKENDS = (
+#     'django_auth_ldap.backend.LDAPBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
+#
+# AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
