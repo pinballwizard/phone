@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from sms.models import SMS
 from django.http import HttpResponse
@@ -25,6 +26,7 @@ class smsSendForm(forms.Form):
     text.widget = forms.Textarea(attrs={'class': 'form-control', 'placeholder':'Введите сообщение'})
 
 
+@csrf_exempt
 def get_sms(request):
     """
     ORDID = > ID сообщения
@@ -36,6 +38,7 @@ def get_sms(request):
     TEXT = > текст сообщения
     """
     if request.method == 'POST':
+        print(request.POST)
         sms = SMS(
             ordid = request.POST['ORDID'],
             cnrid = request.POST['CNRID'],
