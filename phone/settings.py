@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -106,7 +107,14 @@ DATABASES = {
         'PORT': '3306',
         'default-character-set': 'utf8',
         'collate': 'utf8_general_ci',
-    }
+    },
+    # 'sms_info': {
+    #     'NAME': 'DataForSMS',
+    #     'ENGINE': 'sqlserver_pymssql',
+    #     'HOST': 'ksql02.ksk.loc',
+    #     'USER': 'rd',
+    #     'PASSWORD': 'L151?t%fr',
+    # }
 }
 
 
