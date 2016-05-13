@@ -17,8 +17,12 @@ def mssql_connect(id):
     cursor = conn.cursor()
     query = 'SELECT AnswerText FROM DataTable WHERE AbonentId={0}'.format(id)
     print(query)
-    cursor.execute(query)
-    return cursor.fetchone()
+    try:
+        cursor.execute(query)
+        result = cursor.fetchone()[0]
+    except:
+        result = "Неверный номер договора. Обратитесь по номеру +73912286207"
+    return result
 
 
 class smsSendForm(forms.Form):
@@ -63,11 +67,11 @@ def get_sms(request):
         )
         sms.save()
         text = mssql_connect(request.POST['TEXT'])
-        if text:
-            text = text[0]
-        else:
-            text = "Неверный номер договора. Обратитесь по номеру +73912286207"
-        print(text)
+        # if text:
+        #     text = text[0]
+        # else:
+        #     text = "Неверный номер договора. Обратитесь по номеру +73912286207"
+        # print(text)
         post_sms(text, request.POST['SENDER'])
     return HttpResponse(status=200)
 
