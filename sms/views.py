@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-from sms.models import SMS
+from sms.models import SmsReceived, SmsSended
 from django.http import HttpResponse
 import requests
 import pymssql
@@ -28,23 +28,13 @@ def mssql_connect(id):
 class smsSendForm(forms.Form):
     target = forms.CharField(max_length=12, required=True, label='')
     target.widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Введите номер'})
-    text = forms.CharField(max_length=480, required=False, label='')
+    text = forms.CharField(max_length=70, required=False, label='')
     text.widget = forms.Textarea(attrs={'class': 'form-control', 'placeholder':'Введите сообщение'})
 
 
 @csrf_exempt
 def get_sms(request):
     """
-    Как должно быть
-    ORDID => ID сообщения
-    CNRID => номер конрагента
-    SIBNUM => ID входящего ящика
-    SENDER => номер отправителя
-    TARGET => номер получателя
-    RESCOUNT => количество для тарификации
-    TEXT => текст сообщения
-
-    Как есть
     TEXT => текст сообщения
     INBOX => ID входящего ящика
     TARGET => номер получателя
@@ -55,8 +45,7 @@ def get_sms(request):
     LOGIN => Логин личного кабинет
     """
     if request.method == 'POST':
-        print(request.POST)
-        sms = SMS(
+        sms = SmsReceived(
             smsid = request.POST['SMSID'],
             agtid = request.POST['AGTID'],
             inbox = request.POST['INBOX'],
@@ -67,28 +56,32 @@ def get_sms(request):
         )
         sms.save()
         text = mssql_connect(request.POST['TEXT'])
-        # if text:
-        #     text = text[0]
-        # else:
-        #     text = "Неверный номер договора. Обратитесь по номеру +73912286207"
-        # print(text)
         post_sms(text, request.POST['SENDER'])
     return HttpResponse(status=200)
 
 
 def post_sms(message, target):
-    con = {
-        'user': '1637111',
-        'pass': '1637111-123',
-        'action': 'post_sms',
-        'message': message,
-        'target': target,
-    }
-    url = 'http://beeline.amega-inform.ru/sendsms/'
-    print(con)
-    r = requests.post(url, data=con)
-    print(r)
-    return True
+    sms = SmsSended(
+        user = '1637111',
+        password = '1637111-123',
+        action = 'post_sms',
+        message = message,
+        target = target,
+        url = 'http://beeline.amega-inform.ru/sendsms/'
+    )
+    sms.save()
+    # con = {
+    #     'user': '1637111',
+    #     'pass': '1637111-123',
+    #     'action': 'post_sms',
+    #     'message': message,
+    #     'target': target,
+    # }
+
+    print(sms.data())
+    r = requests.post(sms.url, data=sms.data())
+    print(r.status_code)
+    return r.status_code
 
 
 def test_sms(request):
