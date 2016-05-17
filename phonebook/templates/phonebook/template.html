@@ -17,7 +17,43 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
-{% block body %}
-{% endblock body %}
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                {% block nav_search %}
+                {% endblock nav_search %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'phonebook:stats' %}">Статистика</a></li>
+                    <li class="dropdown">
+                        {% if user.is_authenticated %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                {% if user.last_name or user.first_name %}
+                                    {{ user.first_name }} {{ user.last_name }}
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+                                <span class="caret"></span>
+                            </a>
+                            {% if user.is_authenticated %}
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'admin:index' %}">Администрирование</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{% url 'logout' %}">Выход</a></li>
+                                </ul>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'admin:index' %}">Вход</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<main>
+    {% block main %}
+    {% endblock main %}
+</main>
 </body>
 </html>

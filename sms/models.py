@@ -27,6 +27,7 @@ class SmsSended(models.Model):
     target = models.CharField('Номер получателя', max_length=11)
     url = models.CharField('Адрес отправки', max_length=100)
     message = models.CharField('Текст сообщения', max_length=70)
+    delivered = models.BooleanField('Доставлено', default=False)
 
     class Meta:
         verbose_name = "Отправленное SMS сообщение"

@@ -11,12 +11,13 @@ from django.views.generic import TemplateView
 sms_urls = [
     url(r'^$', sms_views.get_sms, name='get_sms'),
     url(r'^post_sms', sms_views.test_sms, name='test_sms'),
+    url(r'^stats', sms_views.smsstats, name='stats'),
 ]
 
 phonebook_urls = [
     url(r'^$', phonebook_views.phonebook_page, name='phonebook'),
     url(r'^refresh', phonebook_views.refresh, name='refresh'),
-    url(r'^stats', phonebook_views.call_stats, name='callstats'),
+    url(r'^stats', phonebook_views.call_stats, name='stats'),
 ]
 
 urlpatterns = [

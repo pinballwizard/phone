@@ -108,13 +108,6 @@ DATABASES = {
         'default-character-set': 'utf8',
         'collate': 'utf8_general_ci',
     },
-    # 'sms_info': {
-    #     'NAME': 'DataForSMS',
-    #     'ENGINE': 'sqlserver_pymssql',
-    #     'HOST': 'ksql02.ksk.loc',
-    #     'USER': 'rd',
-    #     'PASSWORD': 'L151?t%fr',
-    # }
 }
 
 

@@ -2,8 +2,8 @@ from django.contrib import admin
 from phonebook.models import *
 from django.contrib.admin.sites import AdminSite
 
-AdminSite.site_header = 'Управление телефонной книгой'
-AdminSite.site_title = 'Телефонная книга'
+AdminSite.site_header = 'Телефония КрасЭко'
+AdminSite.site_title = 'Телефония КрасЭко'
 
 @admin.register(ExtendedNumber)
 class ExtendedNumberAdmin(admin.ModelAdmin):

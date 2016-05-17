@@ -5,86 +5,54 @@
 {% block title %}
     Телефонная книга
 {% endblock title %}
-{% block body %}
-    <header>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="collapse navbar-collapse">
-                    <div class="col-md-6 col-md-offset-4">
-                        <form class="navbar-form navbar-left" action="{% url 'phonebook:phonebook' %}" role="search" method="get">
-                            <a class="btn btn-default" href="{% url 'phonebook:refresh' %}">
-                                <i class="glyphicon glyphicon-refresh"></i>
-                            </a>
-                            <div class="form-group">
-                                {{ search_form }}
-                            </div>
-                            <button class="btn btn-default" data-tooltip="Искать" type="submit">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </button>
-                        </form>
-                    </div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{% url 'phonebook:callstats' %}">Статистика</a></li>
-                        <li class="dropdown">
-                            {% if user.is_authenticated %}
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    {% if user.last_name or user.first_name %}
-                                        {{ user.first_name }} {{ user.last_name }}
-                                    {% else %}
-                                        {{ user.username }}
-                                    {% endif %}
-                                    <span class="caret"></span>
-                                </a>
-                                {% if user.is_authenticated %}
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{% url 'admin:index' %}">Администрирование</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a href="{% url 'logout' %}">Выход</a></li>
-                                    </ul>
-                                {% endif %}
-                            {% else %}
-                                <a href="{% url 'admin:index' %}">Вход</a>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </div>
+{% block nav_search %}
+    <div class="col-md-6 col-md-offset-4">
+        <form class="navbar-form navbar-left" action="{% url 'phonebook:phonebook' %}" role="search" method="get">
+            <a class="btn btn-default" href="{% url 'phonebook:refresh' %}">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <div class="form-group">
+                {{ search_form }}
             </div>
-        </nav>
-    </header>
-    <main>
-        <div class="container">
-            <div class="row table-responsive">
-                <table class="table table-striped tabel-hover">
-                    <thead>
+            <button class="btn btn-default" data-tooltip="Искать" type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+            </button>
+        </form>
+    </div>
+{% endblock nav_search %}
+{% block main %}
+    <div class="container">
+        <div class="row table-responsive">
+            <table class="table table-striped tabel-hover">
+                <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Номер</th>
+                    <th>Мобильный</th>
+                    {% if perms.phonebook %}
+                        <th>Панель</th>
+                        <th>MAC-адрес</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
                     <tr>
-                        <th>ФИО</th>
-                        <th>Номер</th>
-                        <th>Мобильный</th>
+                        <td>{{ user }}</td>
+                        <td>{{ user.number }}</td>
+                        <td>{{ user.mobile }}</td>
                         {% if perms.phonebook %}
-                            <th>Панель</th>
-                            <th>MAC-адрес</th>
+                            {% if user.panel %}
+                                <td><i class="glyphicon glyphicon-ok text-success"></i></td>
+                            {% else %}
+                                <td><i class="glyphicon glyphicon-remove text-warning"></i></td>
+                            {% endif %}
+                            <td>{{ user.mac_adress }}</td>
                         {% endif %}
                     </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in users %}
-                        <tr>
-                            <td>{{ user }}</td>
-                            <td>{{ user.number }}</td>
-                            <td>{{ user.mobile }}</td>
-                            {% if perms.phonebook %}
-                                {% if user.panel %}
-                                    <td><i class="glyphicon glyphicon-ok text-success"></i></td>
-                                {% else %}
-                                    <td><i class="glyphicon glyphicon-remove text-warning"></i></td>
-                                {% endif %}
-                                <td>{{ user.mac_adress }}</td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </main>
-{% endblock body %}
+    </div>
+{% endblock main %}
