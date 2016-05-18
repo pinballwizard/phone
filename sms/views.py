@@ -18,7 +18,7 @@ def mssql_connect(id):
     }
     with pymssql.connect(**conn_data) as connection:
         with connection.cursor() as cursor:
-            query = "SELECT AnswerText FROM DataTable WHERE AbonentId={0}".format(id.decode('utf-8').encode('cp1251'))
+            query = "SELECT AnswerText FROM DataTable WHERE AbonentId={0}".format(id)
             try:
                 cursor.execute(query)
                 result = cursor.fetchone()[0]
@@ -88,7 +88,7 @@ def test_sms(request):
     if request.method == 'POST':
         message = request.POST['text']
         target = request.POST['target']
-        if post_sms(message, target):
+        if post_sms(message, target) is requests.codes.ok:
             return HttpResponse("Тестовая отправка на номер {0} прошла успешно".format(target))
         else:
             return HttpResponse("Ошибка отправки")

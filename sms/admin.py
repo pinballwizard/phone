@@ -14,7 +14,7 @@ class SmsReceivedAdmin(admin.ModelAdmin):
 @admin.register(SmsSended)
 class SmsSendedAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
-    readonly_fields = ('date', 'user', 'password', 'action', 'target', 'message', 'url')
-    list_display = ('date', 'action', 'target', 'message')
+    readonly_fields = ('date', 'user', 'password', 'action', 'target', 'message', 'url', 'delivered')
+    list_display = ('date', 'action', 'target', 'message', 'delivered')
     search_fields = ['date', 'action', 'target']
     list_filter = ('action',)

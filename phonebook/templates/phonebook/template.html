@@ -24,7 +24,11 @@
                 {% block nav_search %}
                 {% endblock nav_search %}
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'phonebook:stats' %}">Статистика</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'phonebook:stats' %}">Статистика Звонков</a></li>
+                        <li><a href="{% url 'sms:stats' %}">Статистика SMS</a></li>
+                        <li><a href="{% url 'sms:test_sms' %}">Тестовая SMS</a></li>
+                    {% endif %}
                     <li class="dropdown">
                         {% if user.is_authenticated %}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
