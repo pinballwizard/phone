@@ -9,7 +9,6 @@ from sms import views as sms_views
 from django.views.generic import TemplateView
 
 sms_urls = [
-    url(r'^$', sms_views.get_sms, name='get_sms'),
     url(r'^post_sms', sms_views.test_sms, name='test_sms'),
     url(r'^stats', sms_views.smsstats, name='stats'),
 ]
@@ -25,4 +24,5 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     url('^', include(phonebook_urls, namespace='phonebook', app_name='phonebook')),
     url(r'^sms/', include(sms_urls, namespace='sms', app_name='sms')),
+    url(r'^receive', sms_views.get_sms, name='get_sms'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
