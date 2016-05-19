@@ -41,7 +41,8 @@ class smsSendForm(forms.Form):
 
 
 def process_sms_text(sms_str):
-    return re.search(r'(\d{12})',sms_str)
+    m = re.search(r'(\d{12})',sms_str)
+    return m.group(0)
 
 
 @csrf_exempt
