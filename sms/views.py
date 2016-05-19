@@ -7,23 +7,29 @@ from django.http import HttpResponse
 import datetime
 import requests
 import pymssql
+import logging
+import re
+
+logger = logging.getLogger('sms')
 
 
 def mssql_connect(id):
     conn_data = {
-        'server': "ksql02.ksk.loc:1434",
+        'server': 'ksql02.ksk.loc:1434',
         'user': 'rd',
         'password': 'L151?t%fr',
         'database': 'DataForSMS',
     }
     with pymssql.connect(**conn_data) as connection:
         with connection.cursor() as cursor:
-            query = "SELECT AnswerText FROM DataTable WHERE AbonentId={0}".format(id)
+            query = 'SELECT AnswerText FROM DataTable WHERE AbonentId={0}'.format(id)
+            logger.info('Database query -> {0}'.format(query))
             try:
                 cursor.execute(query)
                 result = cursor.fetchone()[0]
             except:
-                result = "Неверный номер договора. Обратитесь по номеру +73912286207"
+                result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
+    logger.info('Database result -> {0}'.format(result))
     return result
 
 
@@ -32,6 +38,10 @@ class smsSendForm(forms.Form):
     target.widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Введите номер'})
     text = forms.CharField(max_length=70, required=False, label='')
     text.widget = forms.Textarea(attrs={'class': 'form-control', 'placeholder':'Введите сообщение'})
+
+
+def process_sms_text(sms_str):
+    return re.search(r'(\d{12})',sms_str)
 
 
 @csrf_exempt
@@ -47,6 +57,7 @@ def get_sms(request):
     LOGIN => Логин личного кабинет
     """
     if request.method == 'POST':
+        logger.info('POST message Received -> {0}'.format(request.POST))
         sms = SmsReceived(
             smsid = request.POST['SMSID'],
             agtid = request.POST['AGTID'],
@@ -57,7 +68,13 @@ def get_sms(request):
             text = request.POST['TEXT']
         )
         sms.save()
-        text = mssql_connect(request.POST['TEXT'])
+        id = process_sms_text(request.POST['TEXT'])
+        if id:
+            text = mssql_connect(id)
+            logger.info('In sms text -> {0} find id -> {1}'.format(request.POST['TEXT'], id))
+        else:
+            text = 'Не найден номер договора в смс. Обратитесь по номеру +73912286207'
+            logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
         post_sms(text, request.POST['SENDER'])
     return HttpResponse(status=200)
 
@@ -72,12 +89,12 @@ def post_sms(message, target):
         url = 'http://beeline.amega-inform.ru/sendsms/'
     )
     sms.save()
-    print(sms.data())
+    logger.info('{3} to {0} with message {1} send to url {2}'.format(sms.target, sms.message, sms.url, sms.action))
     r = requests.post(sms.url, data=sms.data())
     if r.status_code is requests.codes.ok:
         sms.delivered = True
         sms.save()
-    print(r.status_code)
+    logger.info('SMS send status -> {0}'.format(r.status_code))
     return r.status_code
 
 

@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -77,12 +78,38 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'phone.wsgi.application'
 
-# AUTHENTICATION_BACKENDS = (
-#     'django_auth_ldap.backend.LDAPBackend',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
-#
-# AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
+AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
+
+AUTH_LDAP_BIND_DN = "cn=Adminkrek3,cn=Users,dc=ksk,dc=loc"
+AUTH_LDAP_BIND_PASSWORD = "G2x?bhlo"
+# AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=ITDepartment,ou=KREK,dc=ksk,dc=loc", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+
+AUTH_LDAP_CONNECTION_OPTIONS = {
+    ldap.OPT_DEBUG_LEVEL: 1,
+    ldap.OPT_REFERRALS: 0,
+}
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=KREK,dc=ksk,dc=loc",
+    ldap.SCOPE_SUBTREE, "(objectClass=group)"
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
+
+# AUTH_LDAP_REQUIRE_GROUP = "ou=ITDepartment,ou=KREK,dc=ksk,dc=loc"
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 30
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -110,6 +137,30 @@ DATABASES = {
     },
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] - %(levelname)s - %(message)s'
+        },
+    },
+    'handlers': {
+        'sms_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'sms.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'sms': {
+            'handlers': ['sms_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
