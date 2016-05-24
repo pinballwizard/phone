@@ -5,6 +5,7 @@ from django.contrib.admin.sites import AdminSite
 AdminSite.site_header = 'Телефония КрасЭко'
 AdminSite.site_title = 'Телефония КрасЭко'
 
+
 @admin.register(ExtendedNumber)
 class ExtendedNumberAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'owner')
@@ -21,7 +22,7 @@ class ExtendedNumberInLine(admin.TabularInline):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('number', 'last_name', 'mobile', 'mac_adress', 'panel')
-    search_fields = ['fullname','number','mobile']
+    search_fields = ['fullname', 'number', 'mobile']
     list_filter = ('panel',)
     ordering = ['number']
     inlines = [ExtendedNumberInLine]

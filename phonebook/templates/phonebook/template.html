@@ -25,9 +25,26 @@
                 {% endblock nav_search %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'phonebook:stats' %}">Статистика Звонков</a></li>
-                        <li><a href="{% url 'sms:stats' %}">Статистика SMS</a></li>
-                        <li><a href="{% url 'sms:test_sms' %}">Тестовая SMS</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Телефония
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'phonebook:phonebook' %}">Телефонная книга</a></li>
+                                <li><a href="{% url 'phonebook:stats' %}">Статистика</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                SMS
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'sms:stats' %}">Статистика</a></li>
+                                <li><a href="{% url 'sms:test_sms' %}">Тестовая SMS</a></li>
+                            </ul>
+                        </li>
                     {% endif %}
                     <li class="dropdown">
                         {% if user.is_authenticated %}

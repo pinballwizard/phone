@@ -44,3 +44,17 @@ class SmsSended(models.Model):
 
     def __str__(self):
         return "{0} -> {1}".format(self.action, self.target)
+
+
+class Subscriber(models.Model):
+    mobile = models.CharField('Номер телефона', max_length=11, unique=True)
+    account = models.CharField('Лицевой счет', max_length=12)
+    blocked = models.BooleanField('Заблокирован')
+    ban_date = models.DateField('Дата блокировки')
+
+    class Meta:
+        verbose_name = "Абонент"
+        verbose_name_plural = "Абоненты"
+
+    def __str__(self):
+        return "{0} -> {1}".format(self.mobile, self.account)

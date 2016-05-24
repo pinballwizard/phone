@@ -141,23 +141,44 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
+        'console': {
+            'format': '%(levelname)s - %(message)s'
+        },
         'verbose': {
             'format': '[%(asctime)s] - %(levelname)s - %(message)s'
         },
     },
     'handlers': {
         'sms_file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': 'sms.log',
             'formatter': 'verbose',
         },
+        'phonebook_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'phonebook.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
     },
     'loggers': {
         'sms': {
-            'handlers': ['sms_file'],
+            'handlers': ['sms_file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
+        },
+        'phonebook': {
+            'handlers': ['phonebook_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
 }

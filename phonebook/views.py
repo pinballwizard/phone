@@ -1,47 +1,44 @@
-from django.shortcuts import render, redirect
-from django import forms
-from django.db.models import Q
-from django.http import HttpResponse
 import configparser
-from django.db import connections
-from phonebook.models import User, ExtendedNumber
-from operator import itemgetter, attrgetter
+import re
 import paramiko
+import logging
+from django import forms
+from django.db import connections
+from django.shortcuts import render, redirect
+
+from phonebook.models import User
 
 
-def client_exec(command):
+logger = logging.getLogger('phonebook')
+
+
+def ssh_client():
     client = paramiko.SSHClient()
     client.load_system_host_keys()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect('172.16.1.45', 22, 'itadmin', 'G2x?bhlo')
-    (stdin, stdout, stderr) = client.exec_command(command)
-    output = stdout.read()
-    client.close()
-    return output
+    return client
 
-def get_transport():
-    transport = paramiko.Transport(("172.16.1.45",22))
-    transport.connect(username='itadmin', password='G2x?bhlo')
-    return transport
+
+def client_exec(command):
+    with ssh_client() as client:
+        (stdin, stdout, stderr) = client.exec_command(command)
+        output = stdout.read()
+    return output
 
 
 def read_file(remote_file):
-    transport = get_transport()
-    sftp = paramiko.SFTPClient.from_transport(transport)
-    with sftp.file(remote_file, mode='r') as f:
-        infile = f.read()
-    sftp.close()
-    transport.close()
-    return infile.decode('utf-8')
+    with ssh_client() as client:
+        with client.open_sftp() as sftp:
+            with sftp.file(remote_file, mode='r') as f:
+                return f.read().decode('utf-8')
 
 
 def write_in_file(remote_file, text):
-    transport = get_transport()
-    sftp = paramiko.SFTPClient.from_transport(transport)
-    with sftp.file(remote_file, mode='r') as f:
-        f.write(text)
-    sftp.close()
-    transport.close()
+    with ssh_client() as client:
+        with client.open_sftp() as sftp:
+            with sftp.file(remote_file, mode='r') as f:
+                f.write(text)
 
 
 sip_reload = 'sudo asterisk -rx "sip reload"'
@@ -58,6 +55,7 @@ def config_parse():
     f = read_file('/etc/asterisk/users.conf')
     config = configparser.ConfigParser()
     config.read_string(f)
+    [user.delete() for user in User.objects.all() if user.number not in config.sections()]
     for user in config.sections():
         if config.has_option(user, 'fullname') and config.has_option(user, 'cid_number') and config.has_option(user, 'macaddress'):
             User.objects.update_or_create(
@@ -68,7 +66,7 @@ def config_parse():
                 }
             )
         else:
-            print("nothing to save for {0}".format(user))
+            logger.info("Nothing to save for {0}".format(user))
 
 
 # def user_add(request, user):
@@ -96,46 +94,41 @@ def user_panel_parse():
 def ext_panel_parse():
     for user in User.objects.filter(panel=True, mac_adress__isnull=False):
         remotef = '/usr/share/asterisk/phoneprov/{0}.cfg'.format(user.mac_adress)
-        print(user.mac_adress)
+        logger.info('Start parse file {0} for user {1}'.format(remotef, user.mac_adress))
         file = read_file(remotef)
-        EN = {}
-        for line in file.splitlines():
-            if line.startswith('expansion_module'):
-                sl = line.split('=')
-                sl[0] = sl[0].strip()
-                sl[1] = sl[1].strip()
-                key = sl[0].split('.')[3]
-                module = sl[0].split('.')[1]
-                if module not in EN:
-                    EN[module] = {}
-                if key not in EN[module]:
-                    EN[module][key] = {}
-                if sl[0].endswith('value') and sl[1] is not None:
-                    EN[module][key]['number'] = sl[1]
-                if sl[0].endswith('label') and sl[1] is not None:
-                    EN[module][key]['name'] = sl[1]
-        for module in EN:
-            for key in EN[module]:
-                name = EN[module][key]['name']
-                number = EN[module][key]['number']
-                try:
-                    user.extendednumber_set.update_or_create(
-                        key=key,
-                        defaults={
-                            'module': module,
-                            'name': name,
-                            'number': number
-                        }
-                    )
-                except:
-                    print("Extended number {0} {1} already exist".format(name, number))
+        re_value = re.compile(r'expansion_module.(?P<module>\d+).key.(?P<key>\d+).value ?= ?(?P<result>\w+)')
+        for match in re_value.finditer(file):
+            re_dict = match.groupdict()
+            module = re_dict['module']
+            key = re_dict['key']
+            number = re_dict['result']
+            match2 = re.search(r'{0}.key.{1}.label ?= ?(?P<label>.+)'.format(module, key), file)
+            if match2:
+                re_dict_2 = match2.groupdict()
+                name = re_dict_2['label']
+                logger.debug('For {0} parsed {1} and {2}'.format(remotef, re_dict, re_dict_2))
+                user.extendednumber_set.update_or_create(
+                    key=key,
+                    defaults={
+                        'module': module,
+                        'number': number,
+                        'name': name
+                    }
+                )
 
 
-def refresh(request):
-    config_parse()
-    user_panel_parse()
-    ext_panel_parse()
-    return redirect(phonebook_page)
+def mobilephone_parse():
+    filename = '/etc/asterisk/mobilephone.ael'
+    file = read_file(filename)
+    for n in re.finditer(r'_*(?P<number>\d{4}).*(?P<mobile>\d{11})', file):
+        re_n = n.groupdict()
+        mobile = re_n['mobile']
+        number = re_n['number']
+        logger.debug('For file {0} parsed user {1} with mobile => {2}'.format(filename, number, mobile))
+        user = User.objects.filter(number=number)
+        if user:
+            user[0].mobile = mobile
+            user[0].save()
 
 
 def phonebook_page(request):
@@ -169,3 +162,11 @@ def call_stats(request):
         'users': users
     }
     return render(request, 'phonebook/callstats.html', data)
+
+
+def refresh(request):
+    config_parse()
+    user_panel_parse()
+    ext_panel_parse()
+    mobilephone_parse()
+    return redirect('phonebook:phonebook')

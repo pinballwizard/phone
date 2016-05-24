@@ -26,11 +26,12 @@ def mssql_connect(id):
             logger.info('Database query -> {0}'.format(query))
             try:
                 cursor.execute(query)
-                result = cursor.fetchone()[0]
+                result = cursor.fetchone()[0].split(" ")
+                answer = "{0} -> {1}\n{2} -> {3}\n{4} -> {5}".format(*result)
             except:
-                result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
-    logger.info('Database result -> {0}'.format(result))
-    return result
+                answer = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
+    logger.info('Database result -> {0}'.format(answer))
+    return answer
 
 
 class smsSendForm(forms.Form):
@@ -71,11 +72,11 @@ def get_sms(request):
         sms.save()
         id = process_sms_text(request.POST['TEXT'])
         if id:
-            text = mssql_connect(id)
             logger.info('In sms text -> {0} find id -> {1}'.format(request.POST['TEXT'], id))
+            text = mssql_connect(id)
         else:
-            text = 'Не найден номер договора в смс. Обратитесь по номеру +73912286207'
             logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
+            text = 'Не найден номер договора в смс. Обратитесь по номеру +73912286207'
         post_sms(text, request.POST['SENDER'])
     return HttpResponse(status=200)
 

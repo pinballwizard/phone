@@ -7,7 +7,7 @@
 {% endblock title %}
 {% block nav_search %}
     <div class="col-md-4 col-md-offset-4">
-        <form class="navbar-form navbar-left" action="{% url 'phonebook:phonebook' %}" role="search" method="get">
+        <form class="navbar-form" action="{% url 'phonebook:phonebook' %}" role="search" method="get">
             <a class="btn btn-default" href="{% url 'phonebook:refresh' %}">
                 <i class="glyphicon glyphicon-refresh"></i>
             </a>
