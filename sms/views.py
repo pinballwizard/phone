@@ -26,12 +26,11 @@ def mssql_connect(id):
             logger.info('Database query -> {0}'.format(query))
             try:
                 cursor.execute(query)
-                result = cursor.fetchone()[0].split(" ")
-                answer = "{0} -> {1}\n{2} -> {3}\n{4} -> {5}".format(*result)
+                result = cursor.fetchone()[0]
             except:
-                answer = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
-    logger.info('Database result -> {0}'.format(answer))
-    return answer
+                result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
+    logger.info('Database result -> {0}'.format(result))
+    return result
 
 
 class smsSendForm(forms.Form):
