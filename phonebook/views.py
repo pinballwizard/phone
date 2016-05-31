@@ -2,6 +2,7 @@ import configparser
 import re
 import paramiko
 import logging
+import xml.etree.ElementTree as ET
 from django import forms
 from django.db import connections
 from django.shortcuts import render, redirect
@@ -24,7 +25,7 @@ def client_exec(command):
     with ssh_client() as client:
         (stdin, stdout, stderr) = client.exec_command(command)
         output = stdout.read()
-    return output
+    return output.decode('utf-8')
 
 
 def read_file(remote_file):
@@ -37,7 +38,7 @@ def read_file(remote_file):
 def write_in_file(remote_file, text):
     with ssh_client() as client:
         with client.open_sftp() as sftp:
-            with sftp.file(remote_file, mode='r') as f:
+            with sftp.file(remote_file, mode='w+') as f:
                 f.write(text)
 
 
@@ -58,11 +59,20 @@ def config_parse():
     [user.delete() for user in User.objects.all() if user.number not in config.sections()]
     for user in config.sections():
         if config.has_option(user, 'fullname') and config.has_option(user, 'cid_number') and config.has_option(user, 'macaddress'):
+            cid_number = config.get(user, 'cid_number')
+            if re.match(r'25..', cid_number):
+                company = User.COMPANY[1][0]
+            elif re.match(r'27..', cid_number):
+                company = User.COMPANY[2][0]
+            else:
+                company = User.COMPANY[0][0]
             User.objects.update_or_create(
-                number=config.get(user, 'cid_number'),
+                number=cid_number,
                 defaults={
                     'last_name': config.get(user,'fullname'),
-                    'mac_adress': config.get(user, 'macaddress')
+                    'mac_adress': config.get(user, 'macaddress'),
+                    'company': company,
+                    'department': 'general'
                 }
             )
         else:
@@ -81,14 +91,13 @@ def config_parse():
 
 def user_panel_parse():
     command = 'ls /usr/share/asterisk/phoneprov/'
-    configs = client_exec(command).decode('utf-8').split()
-    configs.remove('000000000000.cfg')
-    [configs.remove(config) for config in configs if config.startswith('y')]
-    [configs.remove(config) for config in configs if config.startswith('y')]
-    [configs.remove(config) for config in configs if config.startswith('y')]
-    m = [x.replace('.cfg','') for x in configs]
-    User.objects.filter(mac_adress__in=m).update(panel=True)
-    User.objects.exclude(mac_adress__in=m).update(panel=False)
+    configs = client_exec(command).split()
+    logger.debug(configs)
+    reg = re.compile(r'(?P<mac>\w{12}).cfg')
+    configs = [m.group('mac') for m in map(reg.match, configs) if m]
+    logger.debug(configs)
+    User.objects.filter(mac_adress__in=configs).update(panel=True)
+    User.objects.exclude(mac_adress__in=configs).update(panel=False)
 
 
 def ext_panel_parse():
@@ -164,9 +173,51 @@ def call_stats(request):
     return render(request, 'phonebook/callstats.html', data)
 
 
+def company_phonebook_create():
+    company_list = User.COMPANY
+    departments = User.DEPARTMENT
+    for company in company_list:
+        menu = ET.Element('YealinkIPPhoneMenu')
+        title = ET.SubElement(menu, 'Title')
+        title.text = company[1]
+        for department in departments:
+            item = ET.SubElement(menu, 'MenuItem')
+            name = ET.SubElement(item, 'Name')
+            name.text = department[1]
+            url = ET.SubElement(item, 'URL')
+            url.text = department_phonebook_create(department=department[0], company=company[0])
+        tree = ET.ElementTree(element=menu)
+        filename = '{0}.xml'.format(company[0])
+        file = '/usr/share/asterisk/phoneprov/phonebook/{0}'.format(filename)
+        with ssh_client() as client:
+            with client.open_sftp() as sftp:
+                with sftp.file(file, mode='w+') as f:
+                    tree.write(f, encoding='utf-8', method='xml')
+
+
+def department_phonebook_create(department, company):
+    persons = User.objects.filter(department=department, company=company)
+    menu = ET.Element('YealinkIPPhoneDirectory')
+    for person in persons:
+        entry = ET.SubElement(menu, 'DirectoryEntry')
+        name = ET.SubElement(entry, 'Name')
+        name.text = person.last_name
+        telephone = ET.SubElement(entry, 'Telephone')
+        telephone.text = person.number
+    tree = ET.ElementTree(element=menu)
+    filename = '{0}_{1}.xml'.format(company, department)
+    file = '/usr/share/asterisk/phoneprov/phonebook/{0}'.format(filename)
+    with ssh_client() as client:
+        with client.open_sftp() as sftp:
+            with sftp.file(file, mode='w') as f:
+                tree.write(f, encoding='utf-8', method='xml')
+    return 'http://172.16.81.2:8088/phoneprov/phonebook/{0}'.format(filename)
+
+
 def refresh(request):
     config_parse()
     user_panel_parse()
     ext_panel_parse()
     mobilephone_parse()
+    company_phonebook_create()
     return redirect('phonebook:phonebook')

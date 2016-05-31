@@ -2,11 +2,23 @@ from django.db import models
 
 
 class User(models.Model):
+    COMPANY = (
+        ('kraseco', 'КрасЭко'),
+        ('kic', 'КИЦ'),
+        ('ministry', 'Министерство'),
+    )
+
+    DEPARTMENT = (
+        ('general', 'Общий'),
+    )
+
     last_name = models.CharField('ФИО', max_length=40)
     number = models.CharField('Номер', max_length=5, unique=True)
     mobile = models.CharField('Мобильный', max_length=11, blank=True)
     mac_adress = models.CharField('MAC-адрес', max_length=12, blank=True)
     panel = models.BooleanField('Панель расширения', default=False)
+    company = models.CharField('Компания', max_length=20, default=COMPANY[0][0], choices=COMPANY)
+    department = models.CharField('Отдел', max_length=20, default=DEPARTMENT[0][0], choices=DEPARTMENT)
 
     class Meta:
         verbose_name = "Пользователь"

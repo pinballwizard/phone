@@ -78,38 +78,45 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'phone.wsgi.application'
 
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
 
-AUTH_LDAP_BIND_DN = "cn=Adminkrek3,cn=Users,dc=ksk,dc=loc"
+AUTH_LDAP_BIND_DN = "CN=adminkrek3,CN=Users,DC=ksk,DC=loc"
 AUTH_LDAP_BIND_PASSWORD = "G2x?bhlo"
-# AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=ITDepartment,ou=KREK,dc=ksk,dc=loc", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_USER_SEARCH = LDAPSearch("OU=Отдел IT,OU=KREK,DC=ksk,DC=loc", ldap.SCOPE_SUBTREE, "(sAMAccountName=%(user)s)")
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("CN=ITDepartment,OU=KREK,DC=ksk,DC=loc", ldap.SCOPE_SUBTREE, "(objectClass=group)")
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
 
 AUTH_LDAP_CONNECTION_OPTIONS = {
-    ldap.OPT_DEBUG_LEVEL: 1,
+    ldap.OPT_DEBUG_LEVEL: 0,
     ldap.OPT_REFERRALS: 0,
 }
 
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=KREK,dc=ksk,dc=loc",
-    ldap.SCOPE_SUBTREE, "(objectClass=group)"
-)
-AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
 
-# AUTH_LDAP_REQUIRE_GROUP = "ou=ITDepartment,ou=KREK,dc=ksk,dc=loc"
+
+AUTH_LDAP_REQUIRE_GROUP = "CN=ITDepartment,ou=KREK,dc=ksk,dc=loc"
+
 AUTH_LDAP_USER_ATTR_MAP = {
     "first_name": "givenName",
     "last_name": "sn",
     "email": "mail"
 }
 
-AUTH_LDAP_ALWAYS_UPDATE_USER = True
-AUTH_LDAP_FIND_GROUP_PERMS = True
-AUTH_LDAP_CACHE_GROUPS = True
-AUTH_LDAP_GROUP_CACHE_TIMEOUT = 30
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_active": "CN=ITDepartment,OU=KREK,DC=ksk,DC=loc",
+    "is_staff": "CN=ITDepartment,OU=KREK,DC=ksk,DC=loc",
+    "is_superuser": "CN=ITDepartment,OU=KREK,DC=ksk,DC=loc"
+}
 
-AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
+# AUTH_LDAP_ALWAYS_UPDATE_USER = True
+# AUTH_LDAP_FIND_GROUP_PERMS = True
+# AUTH_LDAP_CACHE_GROUPS = True
+# AUTH_LDAP_GROUP_CACHE_TIMEOUT = 30
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -179,6 +186,11 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'django_auth_ldap': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
     },
 }
