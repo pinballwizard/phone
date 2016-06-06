@@ -262,11 +262,11 @@ def phone_config(request, mac):
     data = {
         'user': User.objects.get(mac_adress=mac),
     }
-    return render(request, 'phonebook/phone/default.cfg', data)
+    return render(request, 'phonebook/phone/default.cfg', data, content_type="text/plain")
 
 
 def phone_default_config(request, name):
-    return render(request, 'phonebook/phone/y{0}.cfg'.format(name))
+    return render(request, 'phonebook/phone/y{0}.cfg'.format(name), content_type="text/plain")
 
 
 def refresh(request):
