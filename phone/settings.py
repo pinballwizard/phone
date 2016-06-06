@@ -97,8 +97,6 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0,
 }
 
-
-
 AUTH_LDAP_REQUIRE_GROUP = "CN=ITDepartment,ou=KREK,dc=ksk,dc=loc"
 
 AUTH_LDAP_USER_ATTR_MAP = {
@@ -113,10 +111,10 @@ AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     "is_superuser": "CN=ITDepartment,OU=KREK,DC=ksk,DC=loc"
 }
 
-# AUTH_LDAP_ALWAYS_UPDATE_USER = True
-# AUTH_LDAP_FIND_GROUP_PERMS = True
-# AUTH_LDAP_CACHE_GROUPS = True
-# AUTH_LDAP_GROUP_CACHE_TIMEOUT = 30
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -216,6 +214,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media/'
+
+
 
 #Email settings
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

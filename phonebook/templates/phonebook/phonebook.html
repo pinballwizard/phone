@@ -29,6 +29,8 @@
                     <th>ФИО</th>
                     <th>Номер</th>
                     <th>Мобильный</th>
+                    <th>Компания</th>
+                    <th>Отдел</th>
                     {% if perms.phonebook %}
                         <th>Панель</th>
                         <th>MAC-адрес</th>
@@ -41,6 +43,8 @@
                         <td>{{ user }}</td>
                         <td>{{ user.number }}</td>
                         <td>{{ user.mobile }}</td>
+                        <td>{{ user.get_company_display }}</td>
+                        <td>{{ user.get_department_display }}</td>
                         {% if perms.phonebook %}
                             {% if user.panel %}
                                 <td><i class="glyphicon glyphicon-ok text-success"></i></td>

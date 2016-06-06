@@ -3,22 +3,45 @@ from django.db import models
 
 class User(models.Model):
     COMPANY = (
-        ('kraseco', 'КрасЭко'),
+        ('kraseco', 'Красэко'),
         ('kic', 'КИЦ'),
         ('ministry', 'Министерство'),
     )
-
-    DEPARTMENT = (
-        ('general', 'Общий'),
+    DEPARTMENTS = (
+        ('kraseco', (
+            ('general', 'Общий'),
+            ('administrator', 'Адиминистративная служба'),
+            ('accounting', 'Бухгалтерия'),
+            ('director', 'Дирекция'),
+            ('engineer', 'Служба главного инженера'),
+            ('secretory', 'Служба делопроизводства'),
+            ('build', 'Служба капитального строительства'),
+            ('law', 'Служба по правовым вопросам'),
+            ('sell', 'Служба реализации услуг'),
+            ('supply', 'Служба снабжения'),
+            ('control', 'Служба финансового контроля'),
+            ('finance', 'Финансово-экономическая служба'),
+            )
+        ),
+        ('kic', (
+            ('kic_general', 'Общий'),
+            )
+        ),
+        ('ministry', (
+            ('min_general', 'Общий'),
+            )
+        ),
     )
 
     last_name = models.CharField('ФИО', max_length=40)
+    name = models.CharField('Имя', max_length=40, default=' ')
+    second_name = models.CharField('Отчество', max_length=40, default=' ')
     number = models.CharField('Номер', max_length=5, unique=True)
     mobile = models.CharField('Мобильный', max_length=11, blank=True)
     mac_adress = models.CharField('MAC-адрес', max_length=12, blank=True)
     panel = models.BooleanField('Панель расширения', default=False)
-    company = models.CharField('Компания', max_length=20, default=COMPANY[0][0], choices=COMPANY)
-    department = models.CharField('Отдел', max_length=20, default=DEPARTMENT[0][0], choices=DEPARTMENT)
+    company = models.CharField('Компания', max_length=50, default=COMPANY[0][0], choices=COMPANY)
+    department = models.CharField('Отдел', max_length=50, default=DEPARTMENTS[0][0], choices=DEPARTMENTS)
 
     class Meta:
         verbose_name = "Пользователь"
@@ -26,6 +49,19 @@ class User(models.Model):
 
     def __str__(self):
         return self.last_name
+        # return '{0} {1}.{2}.'.format(self.last_name, self.name[0], self.second_name[0])
+
+
+class SideNumber(models.Model):
+    name = models.CharField('Имя', max_length=20)
+    number = models.CharField('Номер', max_length=11)
+
+    class Meta:
+        verbose_name = "Сторонний номер"
+        verbose_name_plural = "Сторонние номера"
+
+    def __str__(self):
+        return " ".join([self.name, self.number])
 
 
 class ExtendedNumber(models.Model):

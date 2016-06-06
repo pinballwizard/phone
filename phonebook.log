@@ -1283,3 +1283,233 @@
 [2016-05-30 13:48:26,202] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
 [2016-05-30 13:48:26,624] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
 [2016-05-30 13:48:27,185] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-05-31 15:58:39,517] - INFO - Nothing to save for general
+[2016-05-31 15:58:39,517] - INFO - Nothing to save for local
+[2016-05-31 15:58:42,271] - INFO - Nothing to save for general
+[2016-05-31 15:58:42,271] - INFO - Nothing to save for local
+[2016-05-31 15:58:44,999] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-05-31 15:58:45,468] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-05-31 15:58:45,800] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-05-31 15:58:46,305] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-05-31 15:58:46,692] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-05-31 15:58:47,101] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-05-31 15:58:47,496] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-05-31 15:58:48,003] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-05-31 15:58:48,525] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-05-31 15:58:49,061] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-05-31 15:58:49,584] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-05-31 15:58:50,034] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-05-31 15:58:50,573] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-05-31 15:58:51,057] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-05-31 15:58:51,460] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-05-31 15:58:51,894] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-05-31 15:58:52,420] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-01 09:22:40,658] - INFO - Nothing to save for general
+[2016-06-01 09:22:40,658] - INFO - Nothing to save for local
+[2016-06-01 09:22:43,128] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-01 09:22:43,585] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-01 09:22:43,915] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-01 09:22:44,410] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-01 09:22:44,798] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-01 09:22:45,192] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-01 09:22:45,576] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-01 09:22:46,087] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-01 09:22:46,592] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-01 09:22:47,133] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-01 09:22:47,663] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-01 09:22:48,106] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-01 09:22:48,625] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-01 09:22:49,155] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-01 09:22:49,538] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-01 09:22:49,954] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-01 09:22:50,459] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:01:49,852] - INFO - Nothing to save for general
+[2016-06-03 16:01:49,852] - INFO - Nothing to save for local
+[2016-06-03 16:01:52,560] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:01:53,025] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:01:53,372] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:01:53,862] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:01:54,243] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:01:54,653] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:01:55,045] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:01:55,551] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:01:56,092] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:01:56,617] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:01:57,159] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:01:57,619] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:01:58,131] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:01:58,657] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:01:59,061] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:01:59,487] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:02:00,022] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:06:38,080] - INFO - Nothing to save for general
+[2016-06-03 16:06:38,080] - INFO - Nothing to save for local
+[2016-06-03 16:06:40,671] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:06:41,146] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:06:41,507] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:06:41,987] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:06:42,367] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:06:42,758] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:06:43,150] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:06:43,672] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:06:44,219] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:06:44,756] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:06:45,286] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:06:45,943] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:06:46,475] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:06:46,991] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:06:47,395] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:06:47,825] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:06:48,365] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:09:07,460] - INFO - Nothing to save for general
+[2016-06-03 16:09:07,461] - INFO - Nothing to save for local
+[2016-06-03 16:09:10,002] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:09:10,473] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:09:10,801] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:09:11,528] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:09:11,926] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:09:12,325] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:09:12,709] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:09:13,223] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:09:13,739] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:09:14,274] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:09:14,807] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:09:15,262] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:09:15,814] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:09:16,333] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:09:16,739] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:09:17,159] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:09:17,682] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:11:17,417] - INFO - Nothing to save for general
+[2016-06-03 16:11:17,418] - INFO - Nothing to save for local
+[2016-06-03 16:11:21,971] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:11:22,446] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:11:22,790] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:11:23,292] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:11:23,678] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:11:24,072] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:11:24,459] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:11:24,957] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:11:25,512] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:11:26,043] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:11:26,563] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:11:27,002] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:11:27,537] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:11:28,100] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:11:28,530] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:11:28,966] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:11:29,487] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:11:54,276] - INFO - Nothing to save for general
+[2016-06-03 16:11:54,276] - INFO - Nothing to save for local
+[2016-06-03 16:11:58,908] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:11:59,389] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:11:59,718] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:12:00,236] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:12:00,621] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:12:01,025] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:12:01,407] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:12:01,959] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:12:02,705] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:12:03,237] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:12:03,763] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:12:04,195] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:12:04,712] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:12:05,228] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:12:05,639] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:12:06,068] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:12:06,813] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:26:24,185] - INFO - Nothing to save for general
+[2016-06-03 16:26:24,185] - INFO - Nothing to save for local
+[2016-06-03 16:26:28,900] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:26:29,403] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:26:29,738] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:26:30,264] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:26:30,671] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:26:31,060] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:26:31,451] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:26:31,946] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:26:32,502] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:26:33,029] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:26:33,570] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:26:34,018] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:26:34,565] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:26:35,100] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:26:35,505] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:26:35,946] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:26:36,488] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:26:54,609] - INFO - Nothing to save for general
+[2016-06-03 16:26:54,609] - INFO - Nothing to save for local
+[2016-06-03 16:26:59,267] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:26:59,749] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:27:00,103] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:27:00,599] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:27:00,970] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:27:01,372] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:27:01,958] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:27:02,479] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:27:03,009] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:27:03,777] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:27:04,361] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:27:04,808] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:27:05,350] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:27:05,885] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:27:06,290] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:27:06,720] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:27:07,261] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:47:55,412] - INFO - Nothing to save for general
+[2016-06-03 16:47:55,412] - INFO - Nothing to save for local
+[2016-06-03 16:47:58,038] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:47:58,531] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:47:58,869] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:47:59,374] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:47:59,781] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:48:00,201] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:48:00,606] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:48:01,143] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:48:01,678] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:48:02,227] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:48:02,774] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:48:03,208] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:48:03,929] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:48:04,458] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:48:04,863] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:48:05,276] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:48:05,825] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:51:10,830] - INFO - Nothing to save for general
+[2016-06-03 16:51:10,830] - INFO - Nothing to save for local
+[2016-06-03 16:51:13,584] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:51:14,059] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:51:14,389] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:51:14,901] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:51:15,290] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:51:15,677] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:51:16,051] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:51:16,610] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:51:17,189] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:51:17,728] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:51:18,264] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:51:18,726] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:51:19,265] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:51:20,024] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:51:20,434] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:51:20,881] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:51:21,569] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-03 16:51:56,534] - INFO - Nothing to save for general
+[2016-06-03 16:51:56,534] - INFO - Nothing to save for local
+[2016-06-03 16:51:59,687] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594279d.cfg for user 00156594279d
+[2016-06-03 16:52:00,195] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942700.cfg for user 001565942700
+[2016-06-03 16:52:00,530] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269e.cfg for user 00156594269e
+[2016-06-03 16:52:01,055] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e0.cfg for user 0015659425e0
+[2016-06-03 16:52:01,448] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425df.cfg for user 0015659425df
+[2016-06-03 16:52:01,946] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594269f.cfg for user 00156594269f
+[2016-06-03 16:52:02,343] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426ab.cfg for user 0015659426ab
+[2016-06-03 16:52:02,908] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594270d.cfg for user 00156594270d
+[2016-06-03 16:52:03,469] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425c6.cfg for user 0015659425c6
+[2016-06-03 16:52:04,066] - INFO - Start parse file /usr/share/asterisk/phoneprov/00156594265a.cfg for user 00156594265a
+[2016-06-03 16:52:04,676] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a3.cfg for user 0015659426a3
+[2016-06-03 16:52:05,166] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942629.cfg for user 001565942629
+[2016-06-03 16:52:05,710] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565942716.cfg for user 001565942716
+[2016-06-03 16:52:06,257] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659426a0.cfg for user 0015659426a0
+[2016-06-03 16:52:06,879] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
+[2016-06-03 16:52:07,350] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
+[2016-06-03 16:52:07,896] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6

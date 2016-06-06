@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YealinkIPPhoneMenu>
+    <Title>{{ company_name }}</Title>
+    {% for department in company %}
+        <MenuItem>
+            <Name>{{ department.department }}</Name>
+            <URL>{% url 'phonebook:department' company_name department.department %}</URL>
+        </MenuItem>
+    {% endfor %}
+</YealinkIPPhoneMenu>

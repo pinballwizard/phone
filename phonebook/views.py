@@ -3,6 +3,8 @@ import re
 import paramiko
 import logging
 import xml.etree.ElementTree as ET
+import ldap
+from bonsai import LDAPClient, LDAPEntry
 from django import forms
 from django.db import connections
 from django.shortcuts import render, redirect
@@ -50,6 +52,25 @@ notify = lambda user: 'sudo asterisk -rx "sip notify yealink-check {0}"'.format(
 class SearchForm(forms.Form):
     search = forms.CharField(max_length=50, required=False, label='')
     search.widget = forms.TextInput(attrs={'class': 'form-control', 'type': 'search', 'placeholder':'Введите запрос'})
+
+
+def ldap_search():
+    client = LDAPClient("ldap://dc0.ksk.loc")
+    client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
+    conn = client.connect()
+    result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=group)")
+    for r in result:
+        for member in r['member']:
+            cn = member.split(',')[0].split(' ')
+            if len(cn) > 2:
+                lastname = cn[2]
+                secondname = cn[1]
+                name = cn[0][3:]
+                department = member.split(',')[1][3:]
+                print(department)
+                fullname = '{0} {1}.{2}.'.format(lastname, name[0], secondname[0])
+                print(fullname)
+                # User.objects.filter(last_name=fullname).update(department=department)
 
 
 def config_parse():
@@ -174,13 +195,14 @@ def call_stats(request):
 
 
 def company_phonebook_create():
-    company_list = User.COMPANY
-    departments = User.DEPARTMENT
-    for company in company_list:
+    # company_list = User.COMPANY
+    place = User.DEPARTMENTS
+    print(place)
+    for company in place:
         menu = ET.Element('YealinkIPPhoneMenu')
         title = ET.SubElement(menu, 'Title')
         title.text = company[1]
-        for department in departments:
+        for department in company:
             item = ET.SubElement(menu, 'MenuItem')
             name = ET.SubElement(item, 'Name')
             name.text = department[1]
@@ -214,8 +236,42 @@ def department_phonebook_create(department, company):
     return 'http://172.16.81.2:8088/phoneprov/phonebook/{0}'.format(filename)
 
 
+def company_phonebook_response(request, company_name):
+    # print(company_name)
+    company2 = User.objects.filter(company=company_name).values('department').distinct()
+    # print(company2)
+    # company = [company for company in User.DEPARTMENTS if company[0] == company_name]
+    # print(company[0][1])
+    data = {
+        'company_name': company_name,
+        'company': company2,
+    }
+    return render(request, 'phonebook/phonebook_menu.xml', data, content_type="text/xml")
+
+
+def department_phonebook_response(request, department_name):
+    # print(department_name)
+    # print(User.objects.filter(department=department_name))
+    data = {
+        'users': User.objects.filter(department=department_name)
+    }
+    return render(request, 'phonebook/phonebook_department.xml', data, content_type="text/xml")
+
+
+def phone_config(request, mac):
+    data = {
+        'user': User.objects.get(mac_adress=mac),
+    }
+    return render(request, 'phonebook/phone/default.cfg', data)
+
+
+def phone_default_config(request, name):
+    return render(request, 'phonebook/phone/y{0}.cfg'.format(name))
+
+
 def refresh(request):
     config_parse()
+    # ldap_search()
     user_panel_parse()
     ext_panel_parse()
     mobilephone_parse()

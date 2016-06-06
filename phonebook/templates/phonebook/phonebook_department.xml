@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YealinkIPPhoneDirectory>
+    {% for user in users %}
+        <DirectoryEntry>
+            <Name>{{ user.last_name }}</Name>
+            <Telephone>{{ user.number }}</Telephone>
+        </DirectoryEntry>
+    {% endfor %}
+</YealinkIPPhoneDirectory>
