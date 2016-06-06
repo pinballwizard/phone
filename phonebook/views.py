@@ -249,11 +249,11 @@ def company_phonebook_response(request, company_name):
     return render(request, 'phonebook/phonebook_menu.xml', data, content_type="text/xml")
 
 
-def department_phonebook_response(request, department_name):
+def department_phonebook_response(request, company_name, department_name):
     # print(department_name)
     # print(User.objects.filter(department=department_name))
     data = {
-        'users': User.objects.filter(department=department_name)
+        'users': User.objects.filter(department=department_name, company=company_name)
     }
     return render(request, 'phonebook/phonebook_department.xml', data, content_type="text/xml")
 

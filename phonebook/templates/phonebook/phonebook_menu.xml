@@ -4,7 +4,7 @@
     {% for department in company %}
         <MenuItem>
             <Name>{{ department.department }}</Name>
-            <URL>{% url 'phonebook:department' company_name department.department %}</URL>
+            <URL>http://phonebook.ksk.loc{% url 'phonebook:department' company_name department.department %}</URL>
         </MenuItem>
     {% endfor %}
 </YealinkIPPhoneMenu>
