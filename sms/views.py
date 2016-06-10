@@ -13,24 +13,32 @@ import re
 logger = logging.getLogger('sms')
 
 
-def mssql_connect(id):
+def mssql_connect(client_id):
     conn_data = {
         'server': 'ksql02.ksk.loc:1434',
         'user': 'rd',
         'password': 'L151?t%fr',
         'database': 'DataForSMS',
+        # 'as_dict': True,
     }
-    with pymssql.connect(**conn_data) as connection:
-        with connection.cursor() as cursor:
-            query = 'SELECT AnswerText FROM DataTable WHERE AbonentId={0}'.format(id)
-            logger.info('Database query -> {0}'.format(query))
-            try:
-                cursor.execute(query)
-                result = cursor.fetchone()[0]
-            except:
-                result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
-    logger.info('Database result -> {0}'.format(result))
-    return result
+    try:
+        with pymssql.connect(**conn_data) as connection:
+            with connection.cursor() as cursor:
+                # query = 'SELECT AnswerText FROM DataTable WHERE AbonentId={0}'.format(id)
+                query = 'SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId={0}'.format(client_id)
+                logger.info('Database query -> {0}'.format(query))
+                try:
+                    cursor.execute(query)
+                    result = list(cursor.fetchone())
+                    z = list(zip(result[0:3],result[3:6]))
+                    [z.remove(item) for item in z if item[0] == datetime.datetime(1900,1,1,0,0,0,0)]
+                    result = ' | '.join(['{0} -> {1}'.format(item[0].date(), item[1]) for item in z])
+                except pymssql.OperationalError:
+                    result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
+                logger.info('Database result -> {0}'.format(result))
+                return result
+    except pymssql.DatabaseError:
+        logger.error('Cant connect to database {0}'.format(conn_data['server']))
 
 
 class smsSendForm(forms.Form):
@@ -41,8 +49,7 @@ class smsSendForm(forms.Form):
 
 
 def process_sms_text(sms_str):
-    m = re.search(r'(\d{12})',sms_str)
-    return m.group(0)
+    return re.search(r'(\d{10,19})', sms_str)
 
 
 @csrf_exempt
@@ -69,10 +76,10 @@ def get_sms(request):
             text = request.POST['TEXT']
         )
         sms.save()
-        id = process_sms_text(request.POST['TEXT'])
-        if id:
-            logger.info('In sms text -> {0} find id -> {1}'.format(request.POST['TEXT'], id))
-            text = mssql_connect(id)
+        client_id = process_sms_text(request.POST['TEXT'])
+        if client_id:
+            logger.info('In sms text -> {0} find id -> {1}'.format(request.POST['TEXT'], client_id.group(0)))
+            text = mssql_connect(client_id.group(0))
         else:
             logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
             text = 'Не найден номер договора в смс. Обратитесь по номеру +73912286207'

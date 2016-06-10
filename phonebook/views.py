@@ -4,7 +4,7 @@ import paramiko
 import logging
 import xml.etree.ElementTree as ET
 import ldap
-from bonsai import LDAPClient, LDAPEntry
+import bonsai
 from django import forms
 from django.db import connections
 from django.shortcuts import render, redirect
@@ -54,24 +54,30 @@ class SearchForm(forms.Form):
     search.widget = forms.TextInput(attrs={'class': 'form-control', 'type': 'search', 'placeholder':'Введите запрос'})
 
 
-def ldap_search():
-    client = LDAPClient("ldap://dc0.ksk.loc")
-    client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
-    conn = client.connect()
-    result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=group)")
-    for r in result:
-        for member in r['member']:
-            cn = member.split(',')[0].split(' ')
-            if len(cn) > 2:
-                lastname = cn[2]
-                secondname = cn[1]
-                name = cn[0][3:]
-                department = member.split(',')[1][3:]
-                print(department)
-                fullname = '{0} {1}.{2}.'.format(lastname, name[0], secondname[0])
-                print(fullname)
-                # User.objects.filter(last_name=fullname).update(department=department)
+# def ldap_search():
+#     client = bonsai.LDAPClient("ldap://dc0.ksk.loc")
+#     # client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
+#     conn = client.connect()
+#     # result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=group)", ["cn", "member"])
+#     result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)")
+#     for r in result[1]['member']:
+#         print(r)
+#         en = bonsai.LDAPEntry(r)
+#         print(en.dn)
 
+def ldap_search():
+    ad = ldap.initialize("ldap://dc0.ksk.loc")
+    ad.simple_bind_s("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo")
+    result = ad.search_s("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)", ["cn", "member"])
+    print(result)
+    # client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
+    # conn = client.connect()
+    # result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=group)", ["cn", "member"])
+    # result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)")
+    # for r in result[1]['member']:
+    #     print(r)
+    #     en = bonsai.LDAPEntry(r)
+    #     print(en.dn)
 
 def config_parse():
     f = read_file('/etc/asterisk/users.conf')
@@ -237,21 +243,15 @@ def department_phonebook_create(department, company):
 
 
 def company_phonebook_response(request, company_name):
-    # print(company_name)
-    company2 = User.objects.filter(company=company_name).values('department').distinct()
-    # print(company2)
-    # company = [company for company in User.DEPARTMENTS if company[0] == company_name]
-    # print(company[0][1])
+    company = User.objects.filter(company=company_name).values('department').distinct()
     data = {
         'company_name': company_name,
-        'company': company2,
+        'company': company,
     }
     return render(request, 'phonebook/phonebook_menu.xml', data, content_type="text/xml")
 
 
 def department_phonebook_response(request, company_name, department_name):
-    # print(department_name)
-    # print(User.objects.filter(department=department_name))
     data = {
         'users': User.objects.filter(department=department_name, company=company_name)
     }
@@ -266,14 +266,17 @@ def phone_config(request, mac):
 
 
 def phone_default_config(request, name):
-    return render(request, 'phonebook/phone/y{0}.cfg'.format(name), content_type="text/plain")
+    data = {
+        # ''
+    }
+    return render(request, 'phonebook/phone/y{0}.cfg'.format(name), data, content_type="text/plain")
 
 
 def refresh(request):
-    config_parse()
-    # ldap_search()
-    user_panel_parse()
-    ext_panel_parse()
-    mobilephone_parse()
-    company_phonebook_create()
+    # config_parse()
+    ldap_search()
+    # user_panel_parse()
+    # ext_panel_parse()
+    # mobilephone_parse()
+    # company_phonebook_create()
     return redirect('phonebook:phonebook')

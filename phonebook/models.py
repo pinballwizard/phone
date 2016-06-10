@@ -8,7 +8,7 @@ class User(models.Model):
         ('ministry', 'Министерство'),
     )
     DEPARTMENTS = (
-        ('kraseco', (
+        ('Красэко', (
             ('general', 'Общий'),
             ('administrator', 'Адиминистративная служба'),
             ('accounting', 'Бухгалтерия'),
@@ -23,23 +23,24 @@ class User(models.Model):
             ('finance', 'Финансово-экономическая служба'),
             )
         ),
-        ('kic', (
+        ('КИЦ', (
             ('kic_general', 'Общий'),
             )
         ),
-        ('ministry', (
+        ('Министерство', (
             ('min_general', 'Общий'),
             )
         ),
     )
 
     last_name = models.CharField('ФИО', max_length=40)
-    name = models.CharField('Имя', max_length=40, default=' ')
-    second_name = models.CharField('Отчество', max_length=40, default=' ')
+    name = models.CharField('Имя', max_length=40, default=None, blank=True)
+    second_name = models.CharField('Отчество', max_length=40, default=None, blank=True)
     number = models.CharField('Номер', max_length=5, unique=True)
     mobile = models.CharField('Мобильный', max_length=11, blank=True)
     mac_adress = models.CharField('MAC-адрес', max_length=12, blank=True)
     panel = models.BooleanField('Панель расширения', default=False)
+    voice_mail = models.BooleanField('Голосовая почта', default=False)
     company = models.CharField('Компания', max_length=50, default=COMPANY[0][0], choices=COMPANY)
     department = models.CharField('Отдел', max_length=50, default=DEPARTMENTS[0][0], choices=DEPARTMENTS)
 

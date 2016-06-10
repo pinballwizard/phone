@@ -4,6 +4,9 @@
         <DirectoryEntry>
             <Name>{{ user.last_name }}</Name>
             <Telephone>{{ user.number }}</Telephone>
+            {% if user.mobile %}
+            <Telephone>{{ user.mobile }}</Telephone>
+            {% endif %}
         </DirectoryEntry>
     {% endfor %}
 </YealinkIPPhoneDirectory>

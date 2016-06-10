@@ -4,7 +4,7 @@
     {% for department in company %}
         <MenuItem>
             <Name>{{ department.department }}</Name>
-            <URL>http://172.16.80.53{% url 'phonebook:department' company_name department.department %}</URL>
+            <URL>http://{{ request.get_host }}{% url 'phonebook:department' company_name department.department %}</URL>
         </MenuItem>
     {% endfor %}
 </YealinkIPPhoneMenu>
