@@ -32,13 +32,13 @@ def mssql_connect(client_id):
                     result = list(cursor.fetchone())
                     z = list(zip(result[0:3],result[3:6]))
                     [z.remove(item) for item in z if item[0] == datetime.datetime(1900,1,1,0,0,0,0)]
-                    result = ' | '.join(['{0} -> {1}'.format(item[0].date(), item[1]) for item in z])
+                    result = ' | '.join(['{0} -> {1}'.format(item[0].date().strftime('%d.%m.%Y'), item[1]) for item in z])
                 except pymssql.OperationalError:
                     result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
                 logger.info('Database result -> {0}'.format(result))
                 return result
     except pymssql.DatabaseError:
-        logger.error('Cant connect to database {0}'.format(conn_data['server']))
+        logger.error("Can't connect to database {0}".format(conn_data['server']))
 
 
 class smsSendForm(forms.Form):
@@ -107,6 +107,7 @@ def post_sms(message, target):
 
 
 def test_sms(request):
+    mssql_connect('184015641912')
     data = {
         'send_sms': smsSendForm,
     }
