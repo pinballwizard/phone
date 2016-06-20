@@ -31,7 +31,7 @@ def mssql_connect(client_id):
                     cursor.execute(query)
                     query_result = cursor.fetchone()
                     logger.warning('Database result -> {0}'.format(query_result))
-                    if not query_result:
+                    if query_result:
                         result = list(query_result)
                         z = list(zip(result[0:3],result[3:6]))
                         [z.remove(item) for item in z if item[0] == datetime.datetime(1900,1,1,0,0,0,0)]
