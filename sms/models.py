@@ -10,6 +10,7 @@ class SmsReceived(models.Model):
     target = models.CharField('Номер получателя', max_length=20)
     rescount = models.SmallIntegerField('Количество')
     text = models.CharField('Текст сообщения', max_length=480)
+    response = models.OneToOneField('SmsSended', on_delete=models.SET_DEFAULT, verbose_name='Ответная смс', default=None, null=True)
 
     class Meta:
         verbose_name = "Принятое SMS сообщение"
@@ -28,6 +29,7 @@ class SmsSended(models.Model):
     url = models.CharField('Адрес отправки', max_length=100)
     message = models.CharField('Текст сообщения', max_length=70)
     delivered = models.BooleanField('Доставлено', default=False)
+    answer = models.OneToOneField(SmsReceived, on_delete=models.SET_DEFAULT, verbose_name='Начальная смс', default=None, null=True)
 
     class Meta:
         verbose_name = "Отправленное SMS сообщение"
@@ -48,13 +50,25 @@ class SmsSended(models.Model):
 
 class Subscriber(models.Model):
     mobile = models.CharField('Номер телефона', max_length=11, unique=True)
-    account = models.CharField('Лицевой счет', max_length=12)
-    blocked = models.BooleanField('Заблокирован')
-    ban_date = models.DateField('Дата блокировки')
+    blocked = models.BooleanField('Заблокирован', default=False)
+    ban_date = models.DateField('Дата блокировки', auto_now_add=True)
 
     class Meta:
         verbose_name = "Абонент"
         verbose_name_plural = "Абоненты"
 
     def __str__(self):
-        return "{0} -> {1}".format(self.mobile, self.account)
+        return self.mobile
+
+
+class Account(models.Model):
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, verbose_name="Абонент", default=None)
+    account = models.CharField('Лицевой счет', max_length=20)
+    last_date = models.DateField('Последняя дата обращения', auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Лицевой счет"
+        verbose_name_plural = "Лицевой счет"
+
+    def __str__(self):
+        return self.account

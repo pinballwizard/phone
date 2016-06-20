@@ -273,8 +273,9 @@ def phone_default_config(request, name):
 
 
 def refresh(request):
+    # User.objects.all().update(name=None)
     # config_parse()
-    ldap_search()
+    # ldap_search()
     # user_panel_parse()
     # ext_panel_parse()
     # mobilephone_parse()

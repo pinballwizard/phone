@@ -88,7 +88,7 @@ AUTH_LDAP_SERVER_URI = "ldap://dc0.ksk.loc"
 
 AUTH_LDAP_BIND_DN = "CN=adminkrek3,CN=Users,DC=ksk,DC=loc"
 AUTH_LDAP_BIND_PASSWORD = "G2x?bhlo"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("OU=Отдел IT,OU=KREK,DC=ksk,DC=loc", ldap.SCOPE_SUBTREE, "(sAMAccountName=%(user)s)")
+AUTH_LDAP_USER_SEARCH = LDAPSearch("DC=ksk,DC=loc", ldap.SCOPE_SUBTREE, "(sAMAccountName=%(user)s)")
 
 AUTH_LDAP_GROUP_SEARCH = LDAPSearch("CN=ITDepartment,OU=KREK,DC=ksk,DC=loc", ldap.SCOPE_SUBTREE, "(objectClass=group)")
 AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
@@ -134,7 +134,7 @@ DATABASES = {
     'asterisk': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'asterisk',
-        'USER': 'asterisk',
+        'USER': 'django',
         'PASSWORD': 'G2x?bhlo',
         'HOST': 'orchis.ksk.loc',
         'PORT': '3306',

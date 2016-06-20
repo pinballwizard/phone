@@ -42,7 +42,7 @@ class User(models.Model):
     panel = models.BooleanField('Панель расширения', default=False)
     voice_mail = models.BooleanField('Голосовая почта', default=False)
     company = models.CharField('Компания', max_length=50, default=COMPANY[0][0], choices=COMPANY)
-    department = models.CharField('Отдел', max_length=50, default=DEPARTMENTS[0][0], choices=DEPARTMENTS)
+    department = models.CharField('Отдел', max_length=50, default='general', choices=DEPARTMENTS)
 
     class Meta:
         verbose_name = "Пользователь"

@@ -6,7 +6,7 @@ from sms.models import SmsReceived, SmsSended, Subscriber
 class SmsReceivedAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     readonly_fields = ('date', 'smsid', 'agtid', 'inbox', 'sender', 'target', 'rescount', 'text')
-    list_display = ('date', 'smsid', 'agtid', 'inbox', 'sender', 'target', 'rescount', 'text')
+    list_display = ('date', 'smsid', 'agtid', 'inbox', 'sender', 'target', 'rescount', 'text', 'response')
     search_fields = ['date', 'sender', 'target']
     list_filter = ('agtid',)
 
@@ -15,7 +15,7 @@ class SmsReceivedAdmin(admin.ModelAdmin):
 class SmsSendedAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     readonly_fields = ('date', 'user', 'password', 'action', 'target', 'message', 'url', 'delivered')
-    list_display = ('date', 'action', 'target', 'message', 'delivered')
+    list_display = ('date', 'action', 'target', 'message', 'delivered', 'answer')
     search_fields = ['date', 'action', 'target']
     list_filter = ('action', 'delivered')
 

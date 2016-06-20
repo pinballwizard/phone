@@ -29,11 +29,17 @@ def mssql_connect(client_id):
                 logger.info('Database query -> {0}'.format(query))
                 try:
                     cursor.execute(query)
-                    result = list(cursor.fetchone())
-                    z = list(zip(result[0:3],result[3:6]))
-                    [z.remove(item) for item in z if item[0] == datetime.datetime(1900,1,1,0,0,0,0)]
-                    result = ' | '.join(['{0} -> {1}'.format(item[0].date().strftime('%d.%m.%Y'), item[1]) for item in z])
+                    query_result = cursor.fetchone()
+                    logger.warning('Database result -> {0}'.format(query_result))
+                    if not query_result:
+                        result = list(query_result)
+                        z = list(zip(result[0:3],result[3:6]))
+                        [z.remove(item) for item in z if item[0] == datetime.datetime(1900,1,1,0,0,0,0)]
+                        result = ' | '.join(['{0} -> {1}'.format(item[0].date().strftime('%d.%m.%Y'), item[1]) for item in z])
+                    else:
+                        result = 'Показаний по номеру лицевого счета нет. Обратитесь по номеру +73912286207'
                 except pymssql.OperationalError:
+                    logger.error('Database error -> {0}'.format(pymssql.OperationalError))
                     result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
                 logger.info('Database result -> {0}'.format(result))
                 return result
@@ -83,20 +89,23 @@ def get_sms(request):
         else:
             logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
             text = 'Не найден номер договора в смс. Обратитесь по номеру +73912286207'
-        post_sms(text, request.POST['SENDER'])
+        post_sms(text, sms)
     return HttpResponse(status=200)
 
 
-def post_sms(message, target):
+def post_sms(message, received_sms):
     sms = SmsSended(
         user = '1637111',
         password = '1637111-123',
         action = 'post_sms',
         message = message,
-        target = target,
-        url = 'http://beeline.amega-inform.ru/sendsms/'
+        target = received_sms.sender,
+        url = 'http://beeline.amega-inform.ru/sendsms/',
+        answer = received_sms
     )
     sms.save()
+    received_sms.response = sms
+    received_sms.save()
     logger.info('{3} to {0} with message {1} send to url {2}'.format(sms.target, sms.message, sms.url, sms.action))
     r = requests.post(sms.url, data=sms.data())
     if r.status_code is requests.codes.ok:
