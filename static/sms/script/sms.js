@@ -3,19 +3,37 @@
  */
 
 $(document).ready(function () {
-    $('#chart-container').highcharts({
-        chart: {
-            type: 'line'
-        },
-        title: {
-            text: 'статистика по смс'
-        },
-        series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
-        }]
-    })
+    $.getJSON("/sms/xhr", function (data, status) {
+        var sended = data.sended;
+        var received = data.received;
+        sended = sended.map(function (item) {
+            return [Date.parse(item[0]), item[1]];
+        });
+        received = received.map(function (item) {
+            return [Date.parse(item[0]), item[1]];
+        });
+        $('#chart-container').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Количество по месяцам'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Количество'
+                }
+            },
+            series: [{
+                name: 'Отправленные sms',
+                data: sended
+            },{
+                name: 'Полученные sms',
+                data: received
+            }]
+        })
+    });
 });
