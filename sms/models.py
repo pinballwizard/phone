@@ -28,7 +28,7 @@ class SmsSended(models.Model):
     target = models.CharField('Номер получателя', max_length=11)
     url = models.CharField('Адрес отправки', max_length=100)
     message = models.CharField('Текст сообщения', max_length=70)
-    delivered = models.BooleanField('Доставлено', default=False)
+    success = models.BooleanField('Успешно', default=False)
     answer = models.OneToOneField(SmsReceived, on_delete=models.SET_DEFAULT, verbose_name='Начальная смс', default=None, null=True)
 
     class Meta:

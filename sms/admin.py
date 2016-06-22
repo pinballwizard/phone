@@ -27,16 +27,16 @@ class SmsSendedAdmin(admin.ModelAdmin):
             return obj.answer
     date_hierarchy = 'date'
     list_select_related = ('answer',)
-    readonly_fields = ('date', 'user', 'password', 'action', 'target', 'message', 'url', 'delivered', 'answer', 'answer_sms_link')
-    list_display = ('date', 'action', 'target', 'message', 'delivered', 'answer_sms_link')
+    readonly_fields = ('date', 'user', 'password', 'action', 'target', 'message', 'url', 'success', 'answer', 'answer_sms_link')
+    list_display = ('date', 'action', 'target', 'message', 'success', 'answer_sms_link')
     search_fields = ['date', 'action', 'target']
-    list_filter = ('action', 'delivered')
+    list_filter = ('action', 'success')
 
 
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
     date_hierarchy = 'ban_date'
-    readonly_fields = ('mobile', 'account', 'ban_date')
-    list_display = ('mobile', 'account', 'ban_date', 'blocked')
-    search_fields = ['mobile', 'account']
+    readonly_fields = ('mobile', 'ban_date')
+    list_display = ('mobile', 'ban_date', 'blocked')
+    search_fields = ['mobile']
     list_filter = ('blocked',)

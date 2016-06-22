@@ -94,7 +94,7 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearch("CN=ITDepartment,OU=KREK,DC=ksk,DC=loc", lda
 AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
 
 AUTH_LDAP_CONNECTION_OPTIONS = {
-    ldap.OPT_DEBUG_LEVEL: 0,
+    ldap.OPT_DEBUG_LEVEL: 1,
     ldap.OPT_REFERRALS: 0,
 }
 
