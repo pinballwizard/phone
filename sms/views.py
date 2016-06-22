@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-from django.db.models import Count
+from django.db.models import Count, Avg
 from sms.models import SmsReceived, SmsSended
 from django.http import HttpResponse
+import json
 import datetime
+import calendar
 import requests
 import pymssql
 import logging
@@ -131,14 +133,40 @@ def test_sms(request):
 
 
 def smsstats(request):
+    this_month = datetime.date.today().month
+    first_month = SmsSended.objects.earliest('date')
+    month_range = [dt for dt in SmsSended.objects.datetimes('date', 'month')]
+    month_date = [dt.date().isoformat() for dt in SmsSended.objects.datetimes('date', 'month')]
+    sended_count = [SmsSended.objects.filter(date__month=month.month).count() for month in month_range]
+    received_count = [SmsReceived.objects.filter(date__month=month.month).count() for month in month_range]
     last_month = datetime.datetime.now()-datetime.timedelta(days=30)
+    # json_data = json.dumps(list(zip(month_date,sended_count)))
+    # print(json_data)
     data = {
+        # 'js': json_data,
+        'received': received_count,
+        # 'sended': list(zip(month_date, sended_count)),
+        'sended': sended_count,
+        'months':  month_date,
         'sms_sended': SmsSended.objects.count(),
         'sms_recieved': SmsReceived.objects.count(),
         'sms_sended_last_month': SmsSended.objects.filter(date__date__gte=last_month).count(),
         'sms_recieved_last_month': SmsReceived.objects.filter(date__date__gte=last_month).count(),
-        # 'sms_sended_avg_month': SmsSended.objects.filter(date__date__gte=last_month).count(),
-        # 'sms_recieved_avg_month': SmsReceived.objects.filter(date__date__gte=last_month).count(),
-        # 'most_active_users': SmsReceived.objects.aggregate(Count('sender'))
     }
     return render(request, 'sms/smsstats.html', data)
+
+
+@csrf_exempt
+def xhr_test(request):
+    if request.is_ajax():
+        mimetype = 'application/javascript'
+        month_range = [dt for dt in SmsSended.objects.datetimes('date', 'month')]
+        month_date = [dt.date().isoformat() for dt in SmsSended.objects.datetimes('date', 'month')]
+        sended_count = [SmsSended.objects.filter(date__month=month.month).count() for month in month_range]
+        received_count = [SmsReceived.objects.filter(date__month=month.month).count() for month in month_range]
+        r = {
+            'sended': list(zip(month_date, sended_count)),
+            'received': list(zip(month_date, received_count))
+        }
+        print(json.dumps(r))
+        return HttpResponse(json.dumps(r), mimetype)

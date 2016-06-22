@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 sms_urls = [
     url(r'^post_sms', sms_views.test_sms, name='test_sms'),
     url(r'^stats', sms_views.smsstats, name='stats'),
+    url(r'^xhr$', sms_views.xhr_test, name='xhr'),
 ]
 
 phonebook_urls = [

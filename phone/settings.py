@@ -156,13 +156,13 @@ LOGGING = {
     },
     'handlers': {
         'sms_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'sms.log',
             'formatter': 'verbose',
         },
         'phonebook_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'phonebook.log',
             'formatter': 'verbose',
@@ -222,7 +222,7 @@ MEDIA_ROOT = 'media/'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'mail.kraseco24.ru'
-EMAIL_PORT = 465
+EMAIL_PORT = 25
 EMAIL_HOST_USER = 'sccm@kraseco24.ru'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
