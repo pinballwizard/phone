@@ -1,4 +1,0 @@
-{'target': '+79039213130', 'message': 'Тест2', 'action': 'post_sms', 'pass': '1637111-123', 'user': '1637111'}
-200
-[2016-05-18 14:42:27,575] - INFO - SMS {'user': '1637111', 'pass': '1637111-123', 'target': '79039213130', 'action': 'post_sms', 'message': 'Тест3'} send to url http://beeline.amega-inform.ru/sendsms/
-[2016-05-18 14:42:27,915] - INFO - SMS send status -> 200
