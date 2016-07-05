@@ -1513,3 +1513,7 @@
 [2016-06-03 16:52:06,879] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c79.cfg for user 001565937c79
 [2016-06-03 16:52:07,350] - INFO - Start parse file /usr/share/asterisk/phoneprov/001565937c63.cfg for user 001565937c63
 [2016-06-03 16:52:07,896] - INFO - Start parse file /usr/share/asterisk/phoneprov/0015659425e6.cfg for user 0015659425e6
+[2016-06-29 15:54:09,241] - INFO - Nothing to save for general
+[2016-06-29 15:54:09,243] - INFO - Nothing to save for local
+[2016-06-29 15:54:54,179] - INFO - Nothing to save for general
+[2016-06-29 15:54:54,180] - INFO - Nothing to save for local

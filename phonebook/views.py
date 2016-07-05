@@ -279,5 +279,5 @@ def refresh(request):
     # user_panel_parse()
     # ext_panel_parse()
     # mobilephone_parse()
-    # company_phonebook_create()
+    company_phonebook_create()
     return redirect('phonebook:phonebook')

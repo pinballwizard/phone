@@ -1,6 +1,7 @@
 from django.test import TestCase
-from sms.views import process_sms_text
+from sms.views import process_sms_text, mssql_connect
 import pymssql
+import datetime
 
 
 class SMSTextParseTest(TestCase):
@@ -56,3 +57,7 @@ class SmsMssqlConnectionTest(TestCase):
             result = False
         finally:
             self.assertTrue(result, "Подключение к базе не удалось")
+
+    def test_database_get_result(self):
+        result, state = mssql_connect('161550123540')
+        self.assertTrue(state, "Получение данных из базы не удалось")

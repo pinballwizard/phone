@@ -157,3 +157,26 @@
 [2016-06-10 16:51:46,750] - INFO - Database result -> 29.05.16 -> 67812 | 30.05.16 -> 67847 | 31.05.16 -> 67861
 [2016-06-10 16:54:06,878] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=184015641912
 [2016-06-10 16:54:06,885] - INFO - Database result -> 29.05.2016 -> 67812 | 30.05.2016 -> 67847 | 31.05.2016 -> 67861
+[2016-06-24 10:14:28,456] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 10:14:28,465] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 10:14:28,465] - INFO - Database result -> 18.06.2016 -> 3006 | 01.01.1900 -> 0
+[2016-06-24 10:57:51,158] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 10:57:51,166] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 10:57:51,166] - INFO - Database result -> 18.06.2016 -> 3006
+[2016-06-24 10:59:56,348] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 10:59:56,355] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 10:59:56,355] - INFO - Database result -> 18.06.2016 -> 3006
+[2016-06-24 11:01:28,276] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 11:01:28,283] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 11:01:28,283] - INFO - Database result -> 18.06.2016 -> 3006
+[2016-06-24 11:07:23,558] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 11:07:23,565] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 11:07:23,566] - INFO - Database result -> 18.06.2016 -> 3006
+[2016-06-24 11:07:23,582] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 11:07:23,589] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 11:07:23,589] - INFO - Database result -> 18.06.2016 -> 3006
+[2016-06-24 11:07:54,410] - INFO - Database query -> SELECT Date1,Date2,Date3,Value1,Value2,Value3 FROM DataTable WHERE AbonentId=161550123540
+[2016-06-24 11:07:54,417] - WARNING - Database result -> (datetime.datetime(2016, 6, 18, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), datetime.datetime(1900, 1, 1, 0, 0), Decimal('3006'), Decimal('0'), Decimal('0'))
+[2016-06-24 11:07:54,417] - INFO - Database result -> 18.06.2016 -> 3006
+[2016-07-05 10:16:42,063] - INFO - post_sms to 89039213130 with message Тест send to url http://beeline.amega-inform.ru/sendsms/
+[2016-07-05 10:16:42,355] - INFO - SMS send status -> 200

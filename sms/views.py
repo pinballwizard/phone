@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-from sms.models import SmsReceived, SmsSended
+from sms.models import SmsReceived, SmsSended, Subscriber, Account
 from django.http import HttpResponse, Http404
 import json
 import datetime
@@ -33,13 +33,13 @@ def mssql_connect(client_id):
                     query_result = cursor.fetchone()
                     logger.warning('Database result -> {0}'.format(query_result))
                     if query_result:
-                        result = list(query_result)
-                        z = list(zip(result[0:3], result[3:6]))
-                        [z.remove(item) for item in z if item[0] == datetime.datetime(1900, 1, 1, 0, 0, 0, 0)]
+                        query_zip = zip(query_result[0:3], query_result[3:6])
+                        bad_time = datetime.datetime(1900, 1, 1, 0, 0, 0, 0)
+                        z = [item for item in query_zip if item[0] != bad_time]
                         result = ' | '.join(['{0} -> {1}'.format(item[0].date().strftime('%d.%m.%Y'), item[1]) for item in z])
                         state = True
                     else:
-                        result = 'Показаний по номеру лицевого счета нет. Попробуйте позже'
+                        result = 'Показаний по номеру лицевого счета нет. Попробуйте позже.'
                 except pymssql.OperationalError:
                     logger.error('Database error -> {0}'.format(pymssql.OperationalError))
                     result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
@@ -92,11 +92,11 @@ def get_sms(request):
             logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
             text = 'Не найден номер договора в смс.'
             state = False
-        post_sms(text, sms, state)
+        post_sms(text, sms, state, client_id)
     return HttpResponse(status=200)
 
 
-def post_sms(message, received_sms, state):
+def post_sms(message, received_sms, state, client_id):
     sms = SmsSended(
         user='1637111',
         password='1637111-123',
@@ -109,6 +109,19 @@ def post_sms(message, received_sms, state):
     sms.save()
     received_sms.response = sms
     received_sms.save()
+    if state and client_id:
+        s = Subscriber(
+            mobile=received_sms.sender,
+        )
+        s.save()
+        s.account_set.create(
+            account=client_id,
+        )
+    status_code = send_sms(sms, state)
+    return status_code
+
+
+def send_sms(sms, state):
     logger.info('{3} to {0} with message {1} send to url {2}'.format(sms.target, sms.message, sms.url, sms.action))
     r = requests.post(sms.url, data=sms.data())
     if r.status_code is requests.codes.ok:
@@ -119,15 +132,21 @@ def post_sms(message, received_sms, state):
 
 
 def test_sms(request):
-    mssql_connect('184015641912')
     data = {
         'send_sms': SmsSendForm,
     }
     if request.method == 'POST':
-        message = request.POST['text']
-        target = request.POST['target']
-        if post_sms(message, target, True) is requests.codes.ok:
-            return HttpResponse("Тестовая отправка на номер {0} прошла успешно".format(target))
+        sms = SmsSended(
+            user='1637111',
+            password='1637111-123',
+            action='post_sms',
+            message=request.POST['text'],
+            target=request.POST['target'],
+            url='http://beeline.amega-inform.ru/sendsms/',
+        )
+        sms.save()
+        if send_sms(sms=sms, state=True) is requests.codes.ok:
+            return HttpResponse("Тестовая отправка на номер {0} прошла успешно".format(request.POST['target']))
         else:
             return HttpResponse("Ошибка отправки")
     return render(request, 'sms/testsms.html', data)
@@ -144,17 +163,58 @@ def smsstats(request):
     return render(request, 'sms/smsstats.html', data)
 
 
-def xhr_test(request):
+def month_graph(request):
     if request.is_ajax():
-        sended_month_range = [dt for dt in SmsSended.objects.datetimes('date', 'month')]
+        days_ago = datetime.date.today() - datetime.timedelta(days=365)
+
+        sended_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago)
+        sended_month_range = [dt for dt in sended_sms_filtred.datetimes('date', 'month')]
         sended_month_date = [dt.date().isoformat() for dt in sended_month_range]
-        sended_count = [SmsSended.objects.filter(date__month=month.month).count() for month in sended_month_range]
-        received_month_range = [dt for dt in SmsSended.objects.datetimes('date', 'month')]
+        sended_count = [sended_sms_filtred.filter(date__month=month.month).count() for month in sended_month_range]
+
+        received_sms_filtred = SmsReceived.objects.filter(date__date__gt=days_ago)
+        received_month_range = [dt for dt in received_sms_filtred.datetimes('date', 'month')]
         received_month_date = [dt.date().isoformat() for dt in received_month_range]
-        received_count = [SmsReceived.objects.filter(date__month=month.month).count() for month in received_month_range]
+        received_count = [received_sms_filtred.filter(date__month=month.month).count() for month in received_month_range]
+
+        success_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago, success=True)
+        success_month_range = [dt for dt in success_sms_filtred.datetimes('date', 'month')]
+        success_month_date = [dt.date().isoformat() for dt in success_month_range]
+        success_count = [success_sms_filtred.filter(date__month=month.month).count() for month in success_month_range]
+
         r = {
             'sended': list(zip(sended_month_date, sended_count)),
-            'received': list(zip(received_month_date, received_count))
+            'received': list(zip(received_month_date, received_count)),
+            'success': list(zip(success_month_date, success_count))
+        }
+        return HttpResponse(json.dumps(r), 'application/javascript')
+    else:
+        raise Http404("Page for AJAX only")
+
+
+def daily_graph(request):
+    if request.is_ajax():
+        days_ago = datetime.date.today()-datetime.timedelta(days=30)
+
+        sended_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago)
+        sended_day_range = [dt for dt in sended_sms_filtred.datetimes('date', 'day')]
+        sended_day_date = [dt.date().isoformat() for dt in sended_day_range]
+        sended_count = [sended_sms_filtred.filter(date__day=day.day).count() for day in sended_day_range]
+
+        received_sms_filtred = SmsReceived.objects.filter(date__date__gt=days_ago)
+        received_day_range = [dt for dt in received_sms_filtred.datetimes('date', 'day')]
+        received_day_date = [dt.date().isoformat() for dt in received_day_range]
+        received_count = [received_sms_filtred.filter(date__day=day.day).count() for day in received_day_range]
+
+        success_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago, success=True)
+        success_day_range = [dt for dt in success_sms_filtred.datetimes('date', 'day')]
+        success_day_date = [dt.date().isoformat() for dt in success_day_range]
+        success_count = [success_sms_filtred.filter(date__day=day.day).count() for day in success_day_range]
+
+        r = {
+            'sended': list(zip(sended_day_date, sended_count)),
+            'received': list(zip(received_day_date, received_count)),
+            'success': list(zip(success_day_date, success_count))
         }
         return HttpResponse(json.dumps(r), 'application/javascript')
     else:
