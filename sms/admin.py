@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from sms.models import SmsReceived, SmsSended, Subscriber
+from sms.models import SmsReceived, SmsSended, Subscriber, Account
 from django.core.urlresolvers import reverse
 
 @admin.register(SmsReceived)
@@ -33,6 +33,20 @@ class SmsSendedAdmin(admin.ModelAdmin):
     list_filter = ('action', 'success')
 
 
+class ExtendedAccountAdmin(admin.TabularInline):
+    model = Account
+    extra = 0
+    ordering = ['last_date']
+
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    date_hierarchy = 'last_date'
+    readonly_fields = ('subscriber', 'account', 'last_date')
+    list_display = ('subscriber', 'account', 'last_date')
+    search_fields = ['subscriber', 'account', 'last_date']
+
+
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
     date_hierarchy = 'ban_date'
@@ -40,3 +54,4 @@ class SubscriberAdmin(admin.ModelAdmin):
     list_display = ('mobile', 'ban_date', 'blocked')
     search_fields = ['mobile']
     list_filter = ('blocked',)
+    inlines = [ExtendedAccountAdmin]

@@ -57,6 +57,9 @@ class Subscriber(models.Model):
         verbose_name = "Абонент"
         verbose_name_plural = "Абоненты"
 
+    def block(self):
+        self.blocked = True
+
     def __str__(self):
         return self.mobile
 

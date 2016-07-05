@@ -92,7 +92,7 @@ def get_sms(request):
             logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
             text = 'Не найден номер договора в смс.'
             state = False
-        post_sms(text, sms, state, client_id)
+        post_sms(text, sms, state, client_id.group(0))
     return HttpResponse(status=200)
 
 
@@ -110,13 +110,8 @@ def post_sms(message, received_sms, state, client_id):
     received_sms.response = sms
     received_sms.save()
     if state and client_id:
-        s = Subscriber(
-            mobile=received_sms.sender,
-        )
-        s.save()
-        s.account_set.create(
-            account=client_id,
-        )
+        s, created = Subscriber.objects.update_or_create(mobile=received_sms.sender)
+        s.account_set.update_or_create(account=client_id)
     status_code = send_sms(sms, state)
     return status_code
 
