@@ -51,14 +51,12 @@ class SmsSended(models.Model):
 class Subscriber(models.Model):
     mobile = models.CharField('Номер телефона', max_length=11, unique=True)
     blocked = models.BooleanField('Заблокирован', default=False)
-    ban_date = models.DateField('Дата блокировки', auto_now_add=True)
+    last_date = models.DateTimeField('Дата последнего запроса', auto_now=True)
+    create_date = models.DateTimeField('Дата создания', auto_now_add=True)
 
     class Meta:
         verbose_name = "Абонент"
         verbose_name_plural = "Абоненты"
-
-    def block(self):
-        self.blocked = True
 
     def __str__(self):
         return self.mobile
@@ -67,7 +65,7 @@ class Subscriber(models.Model):
 class Account(models.Model):
     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, verbose_name="Абонент", default=None)
     account = models.CharField('Лицевой счет', max_length=20)
-    last_date = models.DateField('Последняя дата обращения', auto_now_add=True)
+    last_date = models.DateTimeField('Последняя дата обращения', auto_now=True)
 
     class Meta:
         verbose_name = "Лицевой счет"

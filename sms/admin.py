@@ -51,9 +51,9 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
-    date_hierarchy = 'ban_date'
-    readonly_fields = ('mobile', 'ban_date')
-    list_display = ('mobile', 'ban_date', 'blocked')
+    date_hierarchy = 'create_date'
+    readonly_fields = ('mobile', 'create_date', 'last_date')
+    list_display = ('mobile', 'create_date', 'last_date', 'blocked')
     search_fields = ['mobile']
     list_filter = ('blocked',)
     inlines = [ExtendedAccountAdmin]
