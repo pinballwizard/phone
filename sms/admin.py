@@ -37,14 +37,16 @@ class ExtendedAccountAdmin(admin.TabularInline):
     model = Account
     extra = 0
     ordering = ['last_date']
+    list_display = ('account', 'last_date')
+    readonly_fields = ('account', 'last_date')
 
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     date_hierarchy = 'last_date'
-    readonly_fields = ('subscriber', 'account', 'last_date')
-    list_display = ('subscriber', 'account', 'last_date')
-    search_fields = ['subscriber', 'account', 'last_date']
+    readonly_fields = ('account', 'subscriber', 'last_date')
+    list_display = ('account', 'subscriber', 'last_date')
+    search_fields = ['account', 'subscriber', 'last_date']
 
 
 @admin.register(Subscriber)

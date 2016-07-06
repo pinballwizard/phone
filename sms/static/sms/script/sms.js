@@ -2,21 +2,19 @@
  * Created by pinballwizard on 16.05.16.
  */
 
+function date_repack(item) {
+    return [Date.parse(item[0]), item[1]];
+}
+
 $(document).ready(function () {
     $.getJSON("/sms/month_graph", function (data, status) {
-        var sended = data.sended;
-        var received = data.received;
-        var success = data.success;
-        sended = sended.map(function (item) {
-            return [Date.parse(item[0]), item[1]];
-        });
-        received = received.map(function (item) {
-            return [Date.parse(item[0]), item[1]];
-        });
-        success = success.map(function (item) {
-            return [Date.parse(item[0]), item[1]];
-        });
-        $('#month-chart').highcharts({
+        var sended = data.sended.map(date_repack);
+        var sended_summary = data.sended_summary.map(date_repack);
+        var received = data.received.map(date_repack);
+        var received_summary = data.received_summary.map(date_repack);
+        var successed = data.successed.map(date_repack);
+        var successed_summary = data.successed_summary.map(date_repack);
+        $('#month').highcharts({
             chart: {
                 type: 'line'
             },
@@ -39,29 +37,49 @@ $(document).ready(function () {
                 data: received
             },{
                 name: 'Успешные',
-                data: success
+                data: successed
             }]
-        })
-    });
-        $.getJSON("/sms/daily_graph", function (data, status) {
-        var sended = data.sended;
-        var received = data.received;
-        var success = data.success;
-        sended = sended.map(function (item) {
-            return [Date.parse(item[0]), item[1]];
         });
-        received = received.map(function (item) {
-            return [Date.parse(item[0]), item[1]];
-        });
-        success = success.map(function (item) {
-            return [Date.parse(item[0]), item[1]];
-        });
-        $('#daily-chart').highcharts({
+        $('#month-summary').highcharts({
             chart: {
                 type: 'line'
             },
             title: {
-                text: 'Количество по по дням'
+                text: 'Суммарное количество по месяцам'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Количество'
+                }
+            },
+            series: [{
+                name: 'Отправленные',
+                data: sended_summary
+            },{
+                name: 'Полученные',
+                data: received_summary
+            },{
+                name: 'Успешные',
+                data: successed_summary
+            }]
+        });
+    });
+        $.getJSON("/sms/daily_graph", function (data, status) {
+        var sended = data.sended.map(date_repack);
+        var sended_summary = data.sended_summary.map(date_repack);
+        var received = data.received.map(date_repack);
+        var received_summary = data.received_summary.map(date_repack);
+        var successed = data.successed.map(date_repack);
+        var successed_summary = data.successed_summary.map(date_repack);
+        $('#daily').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Количество по дням'
             },
             xAxis: {
                 type: 'datetime'
@@ -79,7 +97,33 @@ $(document).ready(function () {
                 data: received
             },{
                 name: 'Успешные',
-                data: success
+                data: successed
+            }]
+        });
+        $('#daily-summary').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Суммарное количество по дням'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Количество'
+                }
+            },
+            series: [{
+                name: 'Отправленные',
+                data: sended_summary
+            },{
+                name: 'Полученные',
+                data: received_summary
+            },{
+                name: 'Успешные',
+                data: successed_summary
             }]
         })
     });

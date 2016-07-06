@@ -31,13 +31,16 @@ def mssql_connect(client_id):
                 try:
                     cursor.execute(query)
                     query_result = cursor.fetchone()
-                    logger.warning('Database result -> {0}'.format(query_result))
+                    logger.info('Database result -> {0}'.format(query_result))
                     if query_result:
                         query_zip = zip(query_result[0:3], query_result[3:6])
                         bad_time = datetime.datetime(1900, 1, 1, 0, 0, 0, 0)
                         z = [item for item in query_zip if item[0] != bad_time]
-                        result = ' | '.join(['{0} -> {1}'.format(item[0].date().strftime('%d.%m.%Y'), item[1]) for item in z])
-                        state = True
+                        if z:
+                            result = ' | '.join(['{0} -> {1}'.format(item[0].date().strftime('%d.%m.%Y'), item[1]) for item in z])
+                            state = True
+                        else:
+                            result = 'Показаний по номеру лицевого счета нет. Попробуйте позже.'
                     else:
                         result = 'Показаний по номеру лицевого счета нет. Попробуйте позже.'
                 except pymssql.OperationalError:
@@ -150,37 +153,42 @@ def test_sms(request):
 def smsstats(request):
     last_month = datetime.datetime.now()-datetime.timedelta(days=30)
     data = {
-        'sms_sended': SmsSended.objects.count(),
-        'sms_recieved': SmsReceived.objects.count(),
-        'sms_sended_last_month': SmsSended.objects.filter(date__date__gte=last_month).count(),
-        'sms_recieved_last_month': SmsReceived.objects.filter(date__date__gte=last_month).count(),
+        # 'sms_sended': SmsSended.objects.count(),
+        # 'sms_recieved': SmsReceived.objects.count(),
+        # 'sms_sended_last_month': SmsSended.objects.filter(date__date__gte=last_month).count(),
+        # 'sms_recieved_last_month': SmsReceived.objects.filter(date__date__gte=last_month).count(),
     }
     return render(request, 'sms/smsstats.html', data)
 
 
 def month_graph(request):
+
+    def stat_repack(filtered):
+        month_range = filtered.datetimes('date', 'month')
+        month_date = [dt.date().isoformat() for dt in month_range]
+        count = [filtered.filter(date__month=month.month).count() for month in month_range]
+        summary = [filtered.filter(date__lte=month).count() for month in month_range]
+        return month_date, count, summary
+
     if request.is_ajax():
         days_ago = datetime.date.today() - datetime.timedelta(days=365)
 
-        sended_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago)
-        sended_month_range = [dt for dt in sended_sms_filtred.datetimes('date', 'month')]
-        sended_month_date = [dt.date().isoformat() for dt in sended_month_range]
-        sended_count = [sended_sms_filtred.filter(date__month=month.month).count() for month in sended_month_range]
+        sended_sms_filtered = SmsSended.objects.filter(date__date__gt=days_ago)
+        sended_month_date, sended_count, sended_summary = stat_repack(sended_sms_filtered)
 
-        received_sms_filtred = SmsReceived.objects.filter(date__date__gt=days_ago)
-        received_month_range = [dt for dt in received_sms_filtred.datetimes('date', 'month')]
-        received_month_date = [dt.date().isoformat() for dt in received_month_range]
-        received_count = [received_sms_filtred.filter(date__month=month.month).count() for month in received_month_range]
+        received_sms_filtered = SmsReceived.objects.filter(date__date__gt=days_ago)
+        received_month_date, received_count, received_summary = stat_repack(received_sms_filtered)
 
-        success_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago, success=True)
-        success_month_range = [dt for dt in success_sms_filtred.datetimes('date', 'month')]
-        success_month_date = [dt.date().isoformat() for dt in success_month_range]
-        success_count = [success_sms_filtred.filter(date__month=month.month).count() for month in success_month_range]
+        success_sms_filtered = SmsSended.objects.filter(date__date__gt=days_ago, success=True)
+        success_month_date, success_count, success_summary = stat_repack(success_sms_filtered)
 
         r = {
             'sended': list(zip(sended_month_date, sended_count)),
+            'sended_summary': list(zip(sended_month_date, sended_summary)),
             'received': list(zip(received_month_date, received_count)),
-            'success': list(zip(success_month_date, success_count))
+            'received_summary': list(zip(received_month_date, received_summary)),
+            'successed': list(zip(success_month_date, success_count)),
+            'successed_summary': list(zip(success_month_date, success_summary)),
         }
         return HttpResponse(json.dumps(r), 'application/javascript')
     else:
@@ -188,28 +196,33 @@ def month_graph(request):
 
 
 def daily_graph(request):
+
+    def stat_repack(filtered):
+        day_range = filtered.datetimes('date', 'day')
+        day_date = [dt.date().isoformat() for dt in day_range]
+        count = [filtered.filter(date__date=day).count() for day in day_range]
+        summary = [filtered.filter(date__lte=day).count() for day in day_range]
+        return day_date, count, summary
+
     if request.is_ajax():
         days_ago = datetime.date.today()-datetime.timedelta(days=30)
 
-        sended_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago)
-        sended_day_range = [dt for dt in sended_sms_filtred.datetimes('date', 'day')]
-        sended_day_date = [dt.date().isoformat() for dt in sended_day_range]
-        sended_count = [sended_sms_filtred.filter(date__day=day.day).count() for day in sended_day_range]
+        sended_sms_filtered = SmsSended.objects.filter(date__date__gt=days_ago)
+        sended_day_date, sended_count, sended_summary = stat_repack(sended_sms_filtered)
 
-        received_sms_filtred = SmsReceived.objects.filter(date__date__gt=days_ago)
-        received_day_range = [dt for dt in received_sms_filtred.datetimes('date', 'day')]
-        received_day_date = [dt.date().isoformat() for dt in received_day_range]
-        received_count = [received_sms_filtred.filter(date__day=day.day).count() for day in received_day_range]
+        received_sms_filtered = SmsReceived.objects.filter(date__date__gt=days_ago)
+        received_day_date, received_count, received_summary = stat_repack(received_sms_filtered)
 
-        success_sms_filtred = SmsSended.objects.filter(date__date__gt=days_ago, success=True)
-        success_day_range = [dt for dt in success_sms_filtred.datetimes('date', 'day')]
-        success_day_date = [dt.date().isoformat() for dt in success_day_range]
-        success_count = [success_sms_filtred.filter(date__day=day.day).count() for day in success_day_range]
+        success_sms_filtered = SmsSended.objects.filter(date__date__gt=days_ago, success=True)
+        success_day_date, success_count, success_summary = stat_repack(success_sms_filtered)
 
         r = {
             'sended': list(zip(sended_day_date, sended_count)),
+            'sended_summary': list(zip(sended_day_date, sended_summary)),
             'received': list(zip(received_day_date, received_count)),
-            'success': list(zip(success_day_date, success_count))
+            'received_summary': list(zip(received_day_date, received_summary)),
+            'successed': list(zip(success_day_date, success_count)),
+            'successed_summary': list(zip(success_day_date, success_summary)),
         }
         return HttpResponse(json.dumps(r), 'application/javascript')
     else:

@@ -6,31 +6,22 @@
     Статистика по SMS
 {% endblock title %}
 {% block main %}
-    <div class="container">
-        <div class="row table-responsive">
-            <table class="table table-striped tabel-hover">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Всего</th>
-                    <th>За последний месяц</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Отправлено</td>
-                        <td>{{ sms_sended }}</td>
-                        <td>{{ sms_sended_last_month }}</td>
-                    </tr>
-                    <tr>
-                        <td>Получено</td>
-                        <td>{{ sms_recieved }}</td>
-                        <td>{{ sms_recieved_last_month }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="container-fluid">
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation" class="active"><a href="#month-charts" aria-controls="month-chart" role="tab" data-toggle="tab">Год</a></li>
+            <li role="presentation"><a href="#daily-charts" aria-controls="daily-chart" role="tab" data-toggle="tab">Месяц</a></li>
+            <li role="presentation"><a href="#subscriber" aria-controls="subscriber" role="tab" data-toggle="tab">Абоненты</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active chart" id="month-charts">
+                <div class="chart" id="month"></div>
+                <div class="chart" id="month-summary"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="daily-charts">
+                <div class="chart" id="daily"></div>
+                <div class="chart" id="daily-summary"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane chart" id="subscriber"></div>
         </div>
-        <div id="month-chart" class="chart"></div>
-        <div id="daily-chart" class="chart"></div>
     </div>
 {% endblock main %}
