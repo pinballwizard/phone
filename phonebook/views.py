@@ -7,7 +7,9 @@ import ldap
 import bonsai
 from django import forms
 from django.db import connections
+from django.db.models import F
 from django.shortcuts import render, redirect
+from django.http import HttpResponse, Http404
 
 from phonebook.models import User
 
@@ -54,30 +56,39 @@ class SearchForm(forms.Form):
     search.widget = forms.TextInput(attrs={'class': 'form-control', 'type': 'search', 'placeholder':'Введите запрос'})
 
 
-# def ldap_search():
-#     client = bonsai.LDAPClient("ldap://dc0.ksk.loc")
-#     # client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
-#     conn = client.connect()
-#     # result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=group)", ["cn", "member"])
-#     result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)")
-#     for r in result[1]['member']:
-#         print(r)
-#         en = bonsai.LDAPEntry(r)
-#         print(en.dn)
+def revers_name(item_name):
+    for d in User.DEPARTMENTS[0][1]:
+        if d[1] == item_name:
+            return d[0]
+
 
 def ldap_search():
-    ad = ldap.initialize("ldap://dc0.ksk.loc")
-    ad.simple_bind_s("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo")
-    result = ad.search_s("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)", ["cn", "member"])
-    print(result)
-    # client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
-    # conn = client.connect()
-    # result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=group)", ["cn", "member"])
-    # result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)")
-    # for r in result[1]['member']:
-    #     print(r)
-    #     en = bonsai.LDAPEntry(r)
-    #     print(en.dn)
+    client = bonsai.LDAPClient("ldap://dc0.ksk.loc")
+    client.set_credentials("SIMPLE", ("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo"))
+    conn = client.connect()
+    result = conn.search("OU=Address Book,DC=ksk,DC=loc", 1, "(objectClass=organizationalUnit)", ['name', 'distinguishedName'])
+    for item in result:
+        departments = conn.search(item['distinguishedName'][0], 2, "(objectClass=group)", ['name', 'member'])
+        for department in departments:
+            if 'member' in department.keys():
+                for member in department['member']:
+                    fullname = member.split(',')[0][3:]
+                    try:
+                        name, second_name, last_name = fullname.split(' ')
+                        formatted_last_name = "{0} {1}.{2}.".format(last_name, name[0], second_name[0])
+                        User.objects\
+                            .select_for_update()\
+                            .filter(last_name=formatted_last_name)\
+                            .update(department=revers_name(item['name'][0]))
+                    except:
+                        logger.info("{0} it is a group".format(fullname))
+
+# def ldap_search():
+#     ad = ldap.initialize("ldap://dc0.ksk.loc")
+#     ad.simple_bind_s("cn=adminkrek3,cn=Users,dc=ksk,dc=loc", "G2x?bhlo")
+#     result = ad.search_s("OU=Address Book,DC=ksk,DC=loc", 1, "(cn=*)", ["cn", "member"])
+#     for item in result:
+#         print([i.decode('utf-8') for i in item])
 
 def config_parse():
     f = read_file('/etc/asterisk/users.conf')
@@ -88,18 +99,19 @@ def config_parse():
         if config.has_option(user, 'fullname') and config.has_option(user, 'cid_number') and config.has_option(user, 'macaddress'):
             cid_number = config.get(user, 'cid_number')
             if re.match(r'25..', cid_number):
-                company = User.COMPANY[1][0]
+                department = User.DEPARTMENTS[1][1][0][0]
             elif re.match(r'27..', cid_number):
-                company = User.COMPANY[2][0]
+                department = User.DEPARTMENTS[2][1][0][0]
             else:
-                company = User.COMPANY[0][0]
+                department = User.DEPARTMENTS[0][1][0][0]
             User.objects.update_or_create(
                 number=cid_number,
                 defaults={
                     'last_name': config.get(user,'fullname'),
+                    'name': '',
+                    'second_name': '',
                     'mac_adress': config.get(user, 'macaddress'),
-                    'company': company,
-                    'department': 'general'
+                    'department': department,
                 }
             )
         else:
@@ -201,19 +213,17 @@ def call_stats(request):
 
 
 def company_phonebook_create():
-    # company_list = User.COMPANY
     place = User.DEPARTMENTS
-    print(place)
     for company in place:
         menu = ET.Element('YealinkIPPhoneMenu')
         title = ET.SubElement(menu, 'Title')
-        title.text = company[1]
-        for department in company:
+        title.text = company[0]
+        for department in company[1]:
             item = ET.SubElement(menu, 'MenuItem')
             name = ET.SubElement(item, 'Name')
             name.text = department[1]
             url = ET.SubElement(item, 'URL')
-            url.text = department_phonebook_create(department=department[0], company=company[0])
+            url.text = department_phonebook_create(department=department[0])
         tree = ET.ElementTree(element=menu)
         filename = '{0}.xml'.format(company[0])
         file = '/usr/share/asterisk/phoneprov/phonebook/{0}'.format(filename)
@@ -221,10 +231,11 @@ def company_phonebook_create():
             with client.open_sftp() as sftp:
                 with sftp.file(file, mode='w+') as f:
                     tree.write(f, encoding='utf-8', method='xml')
+    # return HttpResponse(tree, 'application/xml')
 
 
-def department_phonebook_create(department, company):
-    persons = User.objects.filter(department=department, company=company)
+def department_phonebook_create(department):
+    persons = User.objects.filter(department=department)
     menu = ET.Element('YealinkIPPhoneDirectory')
     for person in persons:
         entry = ET.SubElement(menu, 'DirectoryEntry')
@@ -233,7 +244,7 @@ def department_phonebook_create(department, company):
         telephone = ET.SubElement(entry, 'Telephone')
         telephone.text = person.number
     tree = ET.ElementTree(element=menu)
-    filename = '{0}_{1}.xml'.format(company, department)
+    filename = '{0}.xml'.format(department)
     file = '/usr/share/asterisk/phoneprov/phonebook/{0}'.format(filename)
     with ssh_client() as client:
         with client.open_sftp() as sftp:
@@ -243,17 +254,19 @@ def department_phonebook_create(department, company):
 
 
 def company_phonebook_response(request, company_name):
-    company = User.objects.filter(company=company_name).values('department').distinct()
+    users = User.objects.filter(department__icontains=company_name)
+    department_dict = set([(user.get_department_display(), user.department) for user in users])
+    print(department_dict)
     data = {
         'company_name': company_name,
-        'company': company,
+        'company': department_dict,
     }
     return render(request, 'phonebook/phonebook_menu.xml', data, content_type="text/xml")
 
 
-def department_phonebook_response(request, company_name, department_name):
+def department_phonebook_response(request, department_name):
     data = {
-        'users': User.objects.filter(department=department_name, company=company_name)
+        'users': User.objects.filter(department=department_name)
     }
     return render(request, 'phonebook/phonebook_department.xml', data, content_type="text/xml")
 
@@ -273,9 +286,9 @@ def phone_default_config(request, name):
 
 
 def refresh(request):
-    # User.objects.all().update(name=None)
+    # User.objects.all().update(department='kraseco_general')
     # config_parse()
-    # ldap_search()
+    ldap_search()
     # user_panel_parse()
     # ext_panel_parse()
     # mobilephone_parse()

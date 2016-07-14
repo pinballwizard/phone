@@ -7,21 +7,28 @@
 {% endblock title %}
 {% block main %}
     <div class="container-fluid">
-        <ul class="nav nav-pills" role="tablist">
-            <li role="presentation" class="active"><a href="#month-charts" aria-controls="month-chart" role="tab" data-toggle="tab">Год</a></li>
-            <li role="presentation"><a href="#daily-charts" aria-controls="daily-chart" role="tab" data-toggle="tab">Месяц</a></li>
-            <li role="presentation"><a href="#subscriber" aria-controls="subscriber" role="tab" data-toggle="tab">Абоненты</a></li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active chart" id="month-charts">
-                <div class="chart" id="month"></div>
-                <div class="chart" id="month-summary"></div>
+        <div class="row centered-pills">
+            <ul class="nav nav-pills" role="tablist">
+                <li role="presentation" class="active"><a href="#month-charts" aria-controls="month-chart" role="tab" data-toggle="tab">Год</a></li>
+                <li role="presentation"><a href="#daily-charts" aria-controls="daily-chart" role="tab" data-toggle="tab">Месяц</a></li>
+                <li role="presentation"><a href="#subscribers-charts" aria-controls="subscribers-charts" role="tab" data-toggle="tab">Абоненты</a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active chart" id="month-charts">
+                    <div class="chart" id="month"></div>
+                    <div class="chart" id="month-summary"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="daily-charts">
+                    <div class="chart" id="daily"></div>
+                    <div class="chart" id="daily-summary"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane chart" id="subscribers-charts">
+                    <div class="chart" id="subscribers"></div>
+                    <div class="chart" id="subscribers-summary"></div>
+                </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="daily-charts">
-                <div class="chart" id="daily"></div>
-                <div class="chart" id="daily-summary"></div>
-            </div>
-            <div role="tabpanel" class="tab-pane chart" id="subscriber"></div>
         </div>
     </div>
 {% endblock main %}

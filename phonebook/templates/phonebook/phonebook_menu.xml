@@ -3,8 +3,8 @@
     <Title>{{ company_name }}</Title>
     {% for department in company %}
         <MenuItem>
-            <Name>{{ department.department }}</Name>
-            <URL>http://{{ request.get_host }}{% url 'phonebook:department' company_name department.department %}</URL>
+            <Name>{{ department.0 }}</Name>
+            <URL>http://{{ request.get_host }}{% url 'phonebook:department' department.1 %}</URL>
         </MenuItem>
     {% endfor %}
 </YealinkIPPhoneMenu>

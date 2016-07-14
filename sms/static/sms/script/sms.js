@@ -67,7 +67,7 @@ $(document).ready(function () {
             }]
         });
     });
-        $.getJSON("/sms/daily_graph", function (data, status) {
+    $.getJSON("/sms/daily_graph", function (data, status) {
         var sended = data.sended.map(date_repack);
         var sended_summary = data.sended_summary.map(date_repack);
         var received = data.received.map(date_repack);
@@ -124,6 +124,54 @@ $(document).ready(function () {
             },{
                 name: 'Успешные',
                 data: successed_summary
+            }]
+        })
+    });
+    $.getJSON("/sms/subscribers_graph", function (data, status) {
+        var subscribers = data.subscribers.map(date_repack);
+        var subscribe = data.subscribe.map(date_repack);
+        var subscribers_summary = data.subscribers_summary.map(date_repack);
+        $('#subscribers').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Количество по дням'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Количество'
+                }
+            },
+            series: [{
+                name: 'Новых абонентов',
+                data: subscribers
+            },{
+                name: 'Абонентов в день',
+                data: subscribe
+            }]
+        });
+        $('#subscribers-summary').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Суммарное количество по дням'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Количество'
+                }
+            },
+            series: [{
+                name: 'Всего абонентов',
+                data: subscribers_summary
             }]
         })
     });

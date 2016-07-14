@@ -46,7 +46,7 @@ def mssql_connect(client_id):
                 except pymssql.OperationalError:
                     logger.error('Database error -> {0}'.format(pymssql.OperationalError))
                     result = 'Неверный номер лицевого счета. Обратитесь по номеру +73912286207'
-                logger.info('Database result -> {0}'.format(result))
+                logger.info('Result -> {0}'.format(result))
                 return result, state
     except pymssql.DatabaseError:
         logger.error("Can't connect to database {0}".format(conn_data['server']))
@@ -91,11 +91,12 @@ def get_sms(request):
         if client_id:
             logger.info('In sms text -> {0} find id -> {1}'.format(request.POST['TEXT'], client_id.group(0)))
             text, state = mssql_connect(client_id.group(0))
+            post_sms(text, sms, state, client_id.group(0))
         else:
             logger.info('In sms text -> {0} id not found'.format(request.POST['TEXT']))
             text = 'Не найден номер договора в смс.'
             state = False
-        post_sms(text, sms, state, client_id.group(0))
+            post_sms(text, sms, state, False)
     return HttpResponse(status=200)
 
 
@@ -120,7 +121,7 @@ def post_sms(message, received_sms, state, client_id):
 
 
 def send_sms(sms, state):
-    logger.info('{3} to {0} with message {1} send to url {2}'.format(sms.target, sms.message, sms.url, sms.action))
+    logger.info('{3} to {0} with message "{1}" send to url {2}'.format(sms.target, sms.message, sms.url, sms.action))
     r = requests.post(sms.url, data=sms.data())
     if r.status_code is requests.codes.ok:
         sms.success = state
@@ -223,6 +224,36 @@ def daily_graph(request):
             'received_summary': list(zip(received_day_date, received_summary)),
             'successed': list(zip(success_day_date, success_count)),
             'successed_summary': list(zip(success_day_date, success_summary)),
+        }
+        return HttpResponse(json.dumps(r), 'application/javascript')
+    else:
+        raise Http404("Page for AJAX only")
+
+
+def subscribers_graph(request):
+
+    def stat_repack(filtered):
+        day_range = filtered.datetimes('create_date', 'day')
+        day_date = [dt.date().isoformat() for dt in day_range]
+        count = [filtered.filter(create_date__date=day).count() for day in day_range]
+        summary = [filtered.filter(create_date__date__lte=day).count() for day in day_range]
+        return day_date, count, summary
+
+    if request.is_ajax():
+        days_ago = datetime.date.today()-datetime.timedelta(days=30)
+
+        subscribers_filtered = Subscriber.objects.filter(create_date__date__gt=days_ago)
+        subscribers_day_date, subscribers_count, subscribers_summary = stat_repack(subscribers_filtered)
+
+        subscribe_filtered = Subscriber.objects.filter(last_date__date__gt=days_ago)
+        subscribe_day_range = subscribe_filtered.datetimes('last_date', 'day')
+        subscribe_day_date = [dt.date().isoformat() for dt in subscribe_day_range]
+        subscribe_count = [subscribe_filtered.filter(last_date__date=day).count() for day in subscribe_day_range]
+
+        r = {
+            'subscribers': list(zip(subscribers_day_date, subscribers_count)),
+            'subscribers_summary': list(zip(subscribers_day_date, subscribers_summary)),
+            'subscribe': list(zip(subscribe_day_date, subscribe_count)),
         }
         return HttpResponse(json.dumps(r), 'application/javascript')
     else:

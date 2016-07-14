@@ -2,35 +2,27 @@ from django.db import models
 
 
 class User(models.Model):
-    COMPANY = (
-        ('kraseco', 'Красэко'),
-        ('kic', 'КИЦ'),
-        ('ministry', 'Министерство'),
-    )
     DEPARTMENTS = (
-        ('Красэко', (
-            ('general', 'Общий'),
-            ('administrator', 'Адиминистративная служба'),
-            ('accounting', 'Бухгалтерия'),
-            ('director', 'Дирекция'),
-            ('engineer', 'Служба главного инженера'),
-            ('secretory', 'Служба делопроизводства'),
-            ('build', 'Служба капитального строительства'),
-            ('law', 'Служба по правовым вопросам'),
-            ('sell', 'Служба реализации услуг'),
-            ('supply', 'Служба снабжения'),
-            ('control', 'Служба финансового контроля'),
-            ('finance', 'Финансово-экономическая служба'),
-            )
-        ),
-        ('КИЦ', (
+        ('kraseco', (
+            ('kraseco_general', 'Общий'),
+            ('kraseco_administrator', 'Административная служба'),
+            ('kraseco_accounting', 'Бухгалтерия'),
+            ('kraseco_director', 'Дирекция'),
+            ('kraseco_engineer', 'Служба главного инженера'),
+            ('kraseco_secretory', 'Служба делопроизводства и секретариата'),
+            ('kraseco_build', 'Служба капитального строительства'),
+            ('kraseco_law', 'Служба по правовым вопросам'),
+            ('kraseco_sell', 'Служба реализации услуг'),
+            ('kraseco_supply', 'Служба снабжения'),
+            ('kraseco_control', 'Служба финансового контроля и внутреннего аудита'),
+            ('kraseco_finance', 'Финансово-экономическая служба'),
+            )),
+        ('kic', (
             ('kic_general', 'Общий'),
-            )
-        ),
-        ('Министерство', (
-            ('min_general', 'Общий'),
-            )
-        ),
+            )),
+        ('ministry', (
+            ('ministry_general', 'Общий'),
+            )),
     )
 
     last_name = models.CharField('ФИО', max_length=40)
@@ -41,8 +33,7 @@ class User(models.Model):
     mac_adress = models.CharField('MAC-адрес', max_length=12, blank=True)
     panel = models.BooleanField('Панель расширения', default=False)
     voice_mail = models.BooleanField('Голосовая почта', default=False)
-    company = models.CharField('Компания', max_length=50, default=COMPANY[0][0], choices=COMPANY)
-    department = models.CharField('Отдел', max_length=50, default='general', choices=DEPARTMENTS)
+    department = models.CharField('Отдел', max_length=50, default=DEPARTMENTS[0][1][0][0], choices=DEPARTMENTS)
 
     class Meta:
         verbose_name = "Пользователь"

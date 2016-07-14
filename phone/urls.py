@@ -13,6 +13,7 @@ sms_urls = [
     url(r'^stats', sms_views.smsstats, name='stats'),
     url(r'^month_graph$', sms_views.month_graph, name='month_graph'),
     url(r'^daily_graph$', sms_views.daily_graph, name='daily_graph'),
+    url(r'^subscribers_graph$', sms_views.subscribers_graph, name='subscribers_graph'),
 ]
 
 phonebook_urls = [
@@ -20,7 +21,7 @@ phonebook_urls = [
     url(r'^refresh', phonebook_views.refresh, name='refresh'),
     url(r'^stats', phonebook_views.call_stats, name='stats'),
     url(r'^phonebook/(?P<company_name>[a-zA-Z]+).xml', phonebook_views.company_phonebook_response, name='menu'),
-    url(r'^phonebook/(?P<company_name>[a-zA-Z]+)_(?P<department_name>[a-zA-Z]+).xml', phonebook_views.department_phonebook_response, name='department'),
+    url(r'^phonebook/(?P<department_name>[a-zA-Z]+_[a-zA-Z]+).xml', phonebook_views.department_phonebook_response, name='department'),
     url(r'^config/(?P<mac>\w{12}).cfg', phonebook_views.phone_config, name='config'),
     url(r'^config/y(?P<name>\d{12}).cfg', phonebook_views.phone_default_config, name='default_config'),
 ]

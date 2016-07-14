@@ -27,8 +27,8 @@ class ExtendedNumberInLine(admin.TabularInline):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('number', 'last_name', 'name', 'second_name', 'company', 'department', 'mobile', 'mac_adress', 'panel')
-    search_fields = ['last_name', 'name', 'second_name', 'number', 'mobile', 'company', 'department']
-    list_filter = ('panel', 'company', 'department')
+    list_display = ('number', 'last_name', 'name', 'second_name', 'department', 'mobile', 'mac_adress', 'panel')
+    search_fields = ['last_name', 'name', 'second_name', 'number', 'mobile', 'department']
+    list_filter = ('panel', 'department')
     ordering = ['number']
     inlines = [ExtendedNumberInLine]
