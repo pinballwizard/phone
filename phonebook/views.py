@@ -21,7 +21,7 @@ def ssh_client():
     client = paramiko.SSHClient()
     client.load_system_host_keys()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect('172.16.1.45', 22, 'itadmin', 'G2x?bhlo')
+    client.connect('172.16.1.45', 22, username='itadmin')
     return client
 
 
