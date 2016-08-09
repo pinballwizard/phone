@@ -287,10 +287,10 @@ def phone_default_config(request, name):
 
 def refresh(request):
     # User.objects.all().update(department='kraseco_general')
-    # config_parse()
+    config_parse()
     ldap_search()
-    # user_panel_parse()
-    # ext_panel_parse()
-    # mobilephone_parse()
+    user_panel_parse()
+    ext_panel_parse()
+    mobilephone_parse()
     company_phonebook_create()
     return redirect('phonebook:phonebook')
